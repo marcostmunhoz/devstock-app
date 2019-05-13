@@ -12,28 +12,41 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
+    final ApiHandler API_HANDLER = ApiHandler.getInstance(this);
+    final MainActivity ctx = this;
+
+    SharedPreferences pref;
+
     EditText etLogin;
     EditText etSenha;
     Button btnEntrar;
     Button btnSair;
-    ApiHandler apiHandler;
-    SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        apiHandler = ApiHandler.getInstance(this);
         pref = getSharedPreferences("devstock_prefs", MODE_PRIVATE);
 
-        if (pref.contains("token")) {
-            // implementar entrada automática caso o token esteja ativo
-        }
+        try {
+            Helpers.verificarSessao(this, new Response.Listener() {
+                @Override
+                public void onResponse(Object response) {
+                    openMenu();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(ctx, "Sessão expirada.\nPor favor, realize o login novamente.", Toast.LENGTH_SHORT);
+                }
+            });
+        } catch (Exception ex) { }
 
         etLogin = findViewById(R.id.etLogin);
         etSenha = findViewById(R.id.etSenha);
@@ -47,15 +60,18 @@ public class MainActivity extends AppCompatActivity {
                         senha = etSenha.getText().toString();
 
                 try {
-                    apiHandler.logInUser(login, senha, new Response.Listener() {
+                    API_HANDLER.logInUser(login, senha, new Response.Listener() {
                         @Override
                         public void onResponse(Object response) {
                             handleLogin(response);
                         }
-                    }, null);
-                } catch (Exception ex) {
-                    // tratar erros
-                }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(ctx, "Usuário e/ou senha inválidos.", Toast.LENGTH_SHORT);
+                        }
+                    });
+                } catch (Exception ex) { }
             }
         });
 
@@ -76,20 +92,15 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = pref.edit();
                 editor.putString("token", json.getString("data.token"));
                 editor.putString("name", json.getString("data.user.nm_usuario"));
-                editor.commit();
+                editor.apply();
 
                 openMenu();
             }
-        } catch (Exception ex) {
-            // tratar erros
-        }
+        } catch (Exception ex) { }
     }
 
     public void openMenu() {
         Intent intent = new Intent(this, ProdutosCRUD.class);
-
-        Toast.makeText(this, "Seja bem vindo, " + pref.getString("name", ""), Toast.LENGTH_SHORT).show();
-
         startActivity(intent);
         finish();
     }

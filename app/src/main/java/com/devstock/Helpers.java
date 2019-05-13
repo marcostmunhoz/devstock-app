@@ -1,5 +1,13 @@
 package com.devstock;
 
+import android.arch.core.util.Function;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.widget.Toast;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,5 +59,51 @@ public class Helpers {
         }
 
         return refObj;
+    }
+
+    public static JSONObject createJsonObject(Object ...args) throws Exception {
+        JSONObject result = new JSONObject();
+        String key = null;
+
+        for (Object obj : args) {
+            if (key == null) {
+                if (!(obj instanceof String)) {
+                    throw new Exception("Key must be a string");
+                } else {
+                    key = (String) obj;
+                    continue;
+                }
+            } else {
+                result.put(key, obj);
+                key = null;
+            }
+        }
+
+        if (key == null) {
+            throw new Exception("Incomplete key/value pair for key " + key);
+        }
+
+        return result;
+    }
+
+    public static void verificarSessao(Context ctx, Response.Listener success, final Response.ErrorListener onError) throws Exception {
+        final SharedPreferences pref = ctx.getSharedPreferences("devstock_prefs", Context.MODE_PRIVATE);
+        ApiHandler handler = ApiHandler.getInstance(ctx);
+
+        if (pref.contains("token")) {
+            String token = pref.getString("token", "");
+            handler.validateToken(token, success, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.remove("token");
+                    editor.apply();
+
+                    if (onError != null) {
+                        onError.onErrorResponse(error);
+                    }
+                }
+            });
+        }
     }
 }
