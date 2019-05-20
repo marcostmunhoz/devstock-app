@@ -1,6 +1,7 @@
 package com.devstock;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -17,10 +18,8 @@ import com.android.volley.VolleyError;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
-    final ApiHandler API_HANDLER = ApiHandler.getInstance(this);
-    final MainActivity ctx = this;
-
     SharedPreferences pref;
+    ApiHandler apiHandler;
 
     EditText etLogin;
     EditText etSenha;
@@ -33,20 +32,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         pref = getSharedPreferences("devstock_prefs", MODE_PRIVATE);
+        apiHandler = ApiHandler.getInstance(this);
 
-        try {
-            Helpers.verificarSessao(this, new Response.Listener() {
-                @Override
-                public void onResponse(Object response) {
-                    openMenu();
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(ctx, "Sessão expirada.\nPor favor, realize o login novamente.", Toast.LENGTH_SHORT);
-                }
-            });
-        } catch (Exception ex) { }
+        final Context ctx = this;
 
         etLogin = findViewById(R.id.etLogin);
         etSenha = findViewById(R.id.etSenha);
@@ -60,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                         senha = etSenha.getText().toString();
 
                 try {
-                    API_HANDLER.logInUser(login, senha, new Response.Listener() {
+                    apiHandler.logInUser(login, senha, new Response.Listener() {
                         @Override
                         public void onResponse(Object response) {
                             handleLogin(response);
@@ -68,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(ctx, "Usuário e/ou senha inválidos.", Toast.LENGTH_SHORT);
+                            Toast.makeText(ctx, "Usuário e/ou senha inválidos.", Toast.LENGTH_SHORT).show();
                         }
                     });
                 } catch (Exception ex) { }

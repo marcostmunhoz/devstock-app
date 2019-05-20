@@ -1,5 +1,6 @@
 package com.devstock;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.android.volley.Request;
@@ -19,19 +20,22 @@ public class ApiHandler {
     private RequestQueue queue;
 
 
-    public static synchronized ApiHandler getInstance(Context context) {
-        if (!instances.containsKey(context)) {
-            if (!instances.containsKey(context)) {
-                instances.put(context, new ApiHandler(context));
+    public static synchronized ApiHandler getInstance(Activity act) {
+        Context ctx = act.getApplicationContext();
+
+        if (!instances.containsKey(ctx)) {
+            if (!instances.containsKey(ctx)) {
+                instances.put(ctx, new ApiHandler(act));
             }
         }
 
-        return instances.get(context);
+        return instances.get(ctx);
     }
 
-    private ApiHandler(Context context) {
-        this.queue = Volley.newRequestQueue(context);
-        instances.put(context, this);
+    private ApiHandler(Activity act) {
+        Context ctx = act.getApplicationContext();
+        this.queue = Volley.newRequestQueue(ctx);
+        instances.put(ctx, this);
     }
 
     public void logInUser(String username, String password, Response.Listener success, Response.ErrorListener error) throws Exception {
@@ -46,7 +50,7 @@ public class ApiHandler {
     public void validateToken(String token, Response.Listener success, Response.ErrorListener error) throws Exception {
         JSONObject body = Helpers.createJsonObject("token", token);
 
-        this.queue.add(new JsonObjectRequest(Request.Method.POST, BASE_PATH + "/check-token/", body, success, error));
+        this.queue.add(new JsonObjectRequest(Request.Method.POST, BASE_PATH + "/check-token", body, success, error));
     }
 
     public void getAllProdutos(Response.Listener success, Response.ErrorListener error) {

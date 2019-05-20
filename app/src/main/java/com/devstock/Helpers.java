@@ -1,5 +1,6 @@
 package com.devstock;
 
+import android.app.Activity;
 import android.arch.core.util.Function;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -79,16 +80,17 @@ public class Helpers {
             }
         }
 
-        if (key == null) {
+        if (key != null) {
             throw new Exception("Incomplete key/value pair for key " + key);
         }
 
         return result;
     }
 
-    public static void verificarSessao(Context ctx, Response.Listener success, final Response.ErrorListener onError) throws Exception {
-        final SharedPreferences pref = ctx.getSharedPreferences("devstock_prefs", Context.MODE_PRIVATE);
-        ApiHandler handler = ApiHandler.getInstance(ctx);
+    public static void verificarSessao(Activity act, Response.Listener success, final Response.ErrorListener onError) throws Exception {
+        Context ctx = act.getApplicationContext();
+        final SharedPreferences pref = act.getSharedPreferences("devstock_prefs", Context.MODE_PRIVATE);
+        ApiHandler handler = ApiHandler.getInstance(act);
 
         if (pref.contains("token")) {
             String token = pref.getString("token", "");
