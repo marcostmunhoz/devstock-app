@@ -52,8 +52,10 @@ public class ApiHandler {
         this.queue.add(new JsonObjectRequest(Request.Method.POST, BASE_PATH + "/check-token", body, success, error));
     }
 
-    public void getAllProdutos(Response.Listener success, Response.ErrorListener error) {
-        this.queue.add(new JsonObjectRequest(Request.Method.GET, BASE_PATH + "/produtos/", null, success, error));
+    public void getAllProdutos(String token, Response.Listener success, Response.ErrorListener error) throws Exception {
+        JSONObject body = Helpers.createJsonObject("token", token);
+
+        this.queue.add(new JsonObjectRequest(Request.Method.GET, BASE_PATH + "/produtos/", body, success, error));
     }
 
     public void getProduto(int idProduto, Response.Listener success, Response.ErrorListener error) {
