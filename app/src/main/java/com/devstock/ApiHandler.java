@@ -19,7 +19,6 @@ public class ApiHandler {
 
     private RequestQueue queue;
 
-
     public static synchronized ApiHandler getInstance(Activity act) {
         Context ctx = act.getApplicationContext();
 
@@ -59,6 +58,10 @@ public class ApiHandler {
 
     public void getProduto(int idProduto, Response.Listener success, Response.ErrorListener error) {
         this.queue.add(new JsonObjectRequest(Request.Method.GET, BASE_PATH + "/produto/" + idProduto, null, success, error));
+    }
+
+    public void newProduto(JSONObject dadosProduto, Response.Listener success, Response.ErrorListener error) {
+        this.queue.add(new JsonObjectRequest(Request.Method.POST, BASE_PATH + "/produto", dadosProduto, success, error));
     }
 
     public void setProduto(int idProduto, JSONObject dadosProduto, Response.Listener success, Response.ErrorListener error) {

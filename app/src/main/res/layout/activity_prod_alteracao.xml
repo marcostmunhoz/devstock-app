@@ -6,132 +6,157 @@
     android:layout_height="match_parent"
     tools:context=".ProdAlteracaoActivity">
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="0dp"
-        android:layout_height="432dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:orientation="vertical"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/txtCod"
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Código:" />
+            android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/etCod"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Código"
-            android:inputType="textPersonName" />
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="0dp"
+                android:layout_height="432dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/txtDesc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Descrição:" />
+                <TextView
+                    android:id="@+id/txtCod"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Código:" />
 
-        <EditText
-            android:id="@+id/etDesc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Descrição"
-            android:inputType="textPersonName" />
+                <EditText
+                    android:id="@+id/etCod"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Código"
+                    android:inputType="textPersonName" />
 
-        <TextView
-            android:id="@+id/txtQtd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Quantidade:" />
+                <TextView
+                    android:id="@+id/txtDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Descrição:" />
 
-        <EditText
-            android:id="@+id/etQtd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Quantidade"
-            android:inputType="textPersonName" />
+                <EditText
+                    android:id="@+id/etDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Descrição"
+                    android:inputType="textPersonName" />
 
-        <TextView
-            android:id="@+id/txtDCad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Data de Cadastro:" />
+                <TextView
+                    android:id="@+id/txtQtd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Quantidade:" />
 
-        <EditText
-            android:id="@+id/etDCad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Data de Cadastro"
-            android:inputType="textPersonName" />
+                <EditText
+                    android:id="@+id/etQtd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:ems="10"
+                    android:hint="Quantidade"
+                    android:inputType="textPersonName" />
 
-        <TextView
-            android:id="@+id/txtDtCad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ultima Edição:" />
+                <TextView
+                    android:id="@+id/txtDCad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Data de Cadastro:" />
 
-        <EditText
-            android:id="@+id/etDtCad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Data de Edição"
-            android:inputType="textPersonName" />
+                <EditText
+                    android:id="@+id/etDCad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:ems="10"
+                    android:hint="Data de Cadastro"
+                    android:inputType="textPersonName" />
 
-        <TextView
-            android:id="@+id/txtDtEdit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Fornecedor:" />
+                <TextView
+                    android:id="@+id/txtDtCad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ultima Edição:" />
 
-        <EditText
-            android:id="@+id/etDtEdit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Fornecedor"
-            android:inputType="textPersonName" />
+                <EditText
+                    android:id="@+id/etDtCad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:ems="10"
+                    android:hint="Data de Edição"
+                    android:inputType="textPersonName" />
 
-        <CheckBox
-            android:id="@+id/cbStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ativo" />
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/txtDtEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Fornecedor:" />
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+                <EditText
+                    android:id="@+id/etDtEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Fornecedor"
+                    android:inputType="textPersonName" />
 
-        <Button
-            android:id="@+id/btnVoltar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Voltar" />
+                <CheckBox
+                    android:id="@+id/cbStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ativo" />
+            </LinearLayout>
 
-        <Button
-            android:id="@+id/btnAlterar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Alterar" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+                <Button
+                    android:id="@+id/btnVoltar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Voltar" />
+
+                <Button
+                    android:id="@+id/btnAlterar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Alterar" />
+
+                <Button
+                    android:id="@+id/btnCadastrar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cadastrar" />
+            </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+
 </android.support.constraint.ConstraintLayout>

@@ -6,20 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".ProdutosCRUD">
 
-    <ListView
-        android:layout_width="397dp"
-        android:layout_height="540dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="404dp"
+        android:layout_width="match_parent"
         android:layout_height="69dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
@@ -30,13 +19,13 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/txtCNPJ"
+            android:id="@+id/txtCod"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Código ou Descrição:" />
 
         <EditText
-            android:id="@+id/etCNPJ"
+            android:id="@+id/etCod"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -57,18 +46,30 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btnConsultar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Consultar" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btnLimpar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Limpar" />
     </LinearLayout>
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="0dp"
+        android:layout_height="540dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
