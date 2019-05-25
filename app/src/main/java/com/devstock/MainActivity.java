@@ -1,6 +1,7 @@
 package com.devstock;
 
 import android.app.Application;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -47,16 +48,20 @@ public class MainActivity extends AppCompatActivity {
                 String login = etLogin.getText().toString(),
                         senha = etSenha.getText().toString();
 
+                final ProgressDialog dialog = Helpers.showLoading(ctx, "Realizando login...");
+
                 try {
                     apiHandler.logInUser(login, senha, new Response.Listener() {
                         @Override
                         public void onResponse(Object response) {
                             handleLogin(response);
+                            dialog.cancel();
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             Toast.makeText(ctx, "Usuário e/ou senha inválidos.", Toast.LENGTH_SHORT).show();
+                            dialog.cancel();
                         }
                     });
                 } catch (Exception ex) { }

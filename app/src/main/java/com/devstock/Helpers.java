@@ -1,6 +1,7 @@
 package com.devstock;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.arch.core.util.Function;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -107,5 +108,14 @@ public class Helpers {
                 }
             });
         }
+    }
+
+    public static ProgressDialog showLoading(Context ctx, String text) {
+        ProgressDialog dialog = new ProgressDialog(ctx);
+        dialog.setTitle("Por favor, aguarde");
+        dialog.setMessage(text);
+        dialog.setIndeterminate(true);
+        dialog.show();
+        return dialog;
     }
 }
