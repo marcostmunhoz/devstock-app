@@ -47,7 +47,7 @@ public class SplashScreen extends AppCompatActivity {
     }
 
     public void openMenu() {
-        Intent intent = new Intent(this, ProdutosCRUD.class);
+        Intent intent = new Intent(this, MenuActivity.class);
         startActivity(intent);
         finish();
     }
