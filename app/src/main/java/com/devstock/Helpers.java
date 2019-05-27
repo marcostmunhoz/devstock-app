@@ -9,11 +9,19 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 
 public class Helpers {
@@ -117,5 +125,26 @@ public class Helpers {
         dialog.setIndeterminate(true);
         dialog.show();
         return dialog;
+    }
+
+    public static <T> T deserialize(String data, Class<T> target) {
+        Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
+        JsonElement element = new JsonParser().parse(data);
+
+        if (element.isJsonObject()) {
+            JsonObject obj = element.getAsJsonObject();
+
+            if (obj.has("data")) {
+                element = obj.getAsJsonArray("data");
+            }
+        }
+
+        return gson.fromJson(element, target);
+    }
+
+    public static Date dateFromString(String date) throws Exception {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        return format.parse(date);
     }
 }

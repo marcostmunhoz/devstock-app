@@ -2,6 +2,7 @@ package com.devstock;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -12,6 +13,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class ApiHandler {
     private static final String BASE_PATH = "http://devstock.herokuapp.com/api";
@@ -52,14 +54,37 @@ public class ApiHandler {
         this.queue.add(new JsonObjectRequest(Request.Method.POST, BASE_PATH + "/check-token", body, success, error));
     }
 
-    public void getAllProdutos(String token, Response.Listener success, Response.ErrorListener error) throws Exception {
-        JSONObject body = Helpers.createJsonObject("token", token);
-
-        this.queue.add(new JsonObjectRequest(Request.Method.GET, BASE_PATH + "/produtos/", body, success, error));
+    public void getAllProdutos(final String token, Response.Listener success, Response.ErrorListener error) throws Exception {
+        this.queue.add(new JsonObjectRequest(Request.Method.GET, BASE_PATH + "/produtos/", null, success, error) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> map = new HashMap<>();
+                map.put("Authorization", "Bearer " + token);
+                return map;
+            }
+        });
     }
 
-    public void getProduto(int idProduto, Response.Listener success, Response.ErrorListener error) {
-        this.queue.add(new JsonObjectRequest(Request.Method.GET, BASE_PATH + "/produto/" + idProduto, null, success, error));
+    public void getProdutosLike(String filter, final String token, Response.Listener success, Response.ErrorListener error) {
+        this.queue.add(new JsonObjectRequest(Request.Method.GET, BASE_PATH + "/produtos/" + Uri.encode(filter), null, success, error) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> map = new HashMap<>();
+                map.put("Authorization", "Bearer " + token);
+                return map;
+            }
+        });
+    }
+
+    public void getProduto(int idProduto, final String token, Response.Listener success, Response.ErrorListener error) {
+        this.queue.add(new JsonObjectRequest(Request.Method.GET, BASE_PATH + "/produto/" + idProduto, null, success, error) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> map = new HashMap<>();
+                map.put("Authorization", "Bearer " + token);
+                return map;
+            }
+        });
     }
 
     public void newProduto(JSONObject dadosProduto, Response.Listener success, Response.ErrorListener error) {
@@ -68,5 +93,16 @@ public class ApiHandler {
 
     public void setProduto(int idProduto, JSONObject dadosProduto, Response.Listener success, Response.ErrorListener error) {
         this.queue.add(new JsonObjectRequest(Request.Method.PUT, BASE_PATH + "/produto/" + idProduto, dadosProduto, success, error));
+    }
+
+    public void deleteProduto(int idProduto, final String token, Response.Listener success, Response.ErrorListener error) {
+        this.queue.add(new JsonObjectRequest(Request.Method.DELETE, BASE_PATH + "/produto/" + idProduto, null, success, error) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> map = new HashMap<>();
+                map.put("Authorization", "Bearer " + token);
+                return map;
+            }
+        });
     }
 }
