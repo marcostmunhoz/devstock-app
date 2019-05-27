@@ -63,19 +63,16 @@ public class ApiHandler {
         this.queue.add(new JsonObjectRequest(Request.Method.POST, BASE_PATH + "/login", body, success, error));
     }
 
-    public void validateToken(Response.Listener success, Response.ErrorListener error) throws Exception {
-        JSONObject body = Helpers.createJsonObject("token", AUTH_TOKEN);
+    public void validateToken(final String token, Response.Listener success, Response.ErrorListener error) throws Exception {
 
-        this.queue.add(new JsonObjectRequest(Request.Method.POST, BASE_PATH + "/check-token", body, success, error));
+        this.queue.add(new JsonObjectRequest(Request.Method.GET, BASE_PATH + "/check-token/" + Uri.encode(token), null, success, error));
     }
 
     public void getProdutosLike(String query, Response.Listener success, Response.ErrorListener error) {
         this.queue.add(new JsonObjectRequest(Request.Method.GET, BASE_PATH + "/produtos/" + Uri.encode(query), null, success, error) {
             @Override
             public Map<String, String> getHeaders() {
-                Map<String, String> map = new HashMap<>();
-                map.put("Authorization", "Bearer " + AUTH_TOKEN);
-                return map;
+                return ApiHandler.getHeaders();
             }
         });
     }
@@ -93,9 +90,7 @@ public class ApiHandler {
         this.queue.add(new JsonObjectRequest(Request.Method.POST, BASE_PATH + "/produto", dadosProduto, success, error) {
             @Override
             public Map<String, String> getHeaders() {
-                Map<String, String> map = new HashMap<>();
-                map.put("Authorization", "Bearer " + AUTH_TOKEN);
-                return map;
+                return ApiHandler.getHeaders();
             }
         });
     }
@@ -104,9 +99,7 @@ public class ApiHandler {
         this.queue.add(new JsonObjectRequest(Request.Method.PUT, BASE_PATH + "/produto/" + idProduto, dadosProduto, success, error) {
             @Override
             public Map<String, String> getHeaders() {
-                Map<String, String> map = new HashMap<>();
-                map.put("Authorization", "Bearer " + AUTH_TOKEN);
-                return map;
+                return ApiHandler.getHeaders();
             }
         });
     }

@@ -66,6 +66,7 @@ public class MenuActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (ApiHandler.isLoggedIn()) {
                     ApiHandler.setToken(null);
+                    Helpers.removePrefs(MenuActivity.this, "AUTH_TOKEN");
                     startActivity(6);
                 }
             }
@@ -92,7 +93,7 @@ public class MenuActivity extends AppCompatActivity {
                 //intent = new Intent(this, Configuracoes.class);
                 break;
             case 6:
-                intent = new Intent(this, MainActivity.class);
+                intent = new Intent(this, LoginActivity.class);
                 super.startActivity(intent);
                 finish();
                 return;

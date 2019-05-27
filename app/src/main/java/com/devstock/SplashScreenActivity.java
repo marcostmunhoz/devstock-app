@@ -12,8 +12,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
-public class SplashScreen extends AppCompatActivity {
-    SharedPreferences pref;
+public class SplashScreenActivity extends AppCompatActivity {
     ApiHandler apiHandler;
 
     @Override
@@ -23,23 +22,26 @@ public class SplashScreen extends AppCompatActivity {
 
         apiHandler = ApiHandler.getInstance(this);
 
-        final Context ctx = this;
+        final String token = Helpers.getPrefs(this, "AUTH_TOKEN");
 
-        if (ApiHandler.isLoggedIn()) {
+        if (token != null) {
             try {
                 Helpers.verificarSessao(this, new Response.Listener() {
                     @Override
                     public void onResponse(Object response) {
+                        ApiHandler.setToken(token);
                         openMenu();
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(ctx, "Sessão expirada.\nPor favor, realize o login novamente.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SplashScreenActivity.this, "Sessão expirada.\nPor favor, realize o login novamente.", Toast.LENGTH_SHORT).show();
                         openLogin();
                     }
                 });
-            } catch (Exception ex) { }
+            } catch (Exception ex) {
+                Toast.makeText(SplashScreenActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         } else {
             openLogin();
         }
@@ -52,7 +54,7 @@ public class SplashScreen extends AppCompatActivity {
     }
 
     public void openLogin() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }

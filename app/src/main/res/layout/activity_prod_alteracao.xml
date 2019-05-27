@@ -74,13 +74,13 @@
                     android:inputType="textPersonName" />
 
                 <TextView
-                    android:id="@+id/txtDCad"
+                    android:id="@+id/txtDtCad"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Data de Cadastro:" />
 
                 <EditText
-                    android:id="@+id/etDCad"
+                    android:id="@+id/etDtCad"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:editable="false"
@@ -89,13 +89,13 @@
                     android:inputType="textPersonName" />
 
                 <TextView
-                    android:id="@+id/txtDtCad"
+                    android:id="@+id/txtDtEdit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Ultima Edição:" />
 
                 <EditText
-                    android:id="@+id/etDtCad"
+                    android:id="@+id/etDtEdit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:editable="false"
@@ -104,13 +104,13 @@
                     android:inputType="textPersonName" />
 
                 <TextView
-                    android:id="@+id/txtDtEdit"
+                    android:id="@+id/txtForn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Fornecedor:" />
 
                 <EditText
-                    android:id="@+id/etDtEdit"
+                    android:id="@+id/etForn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"

@@ -1,5 +1,6 @@
 package com.devstock;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -40,6 +41,7 @@ public class ProdutosCRUD extends AppCompatActivity {
 
         etCod = findViewById(R.id.etCod);
         btnConsultar = findViewById(R.id.btnConsultar);
+        btnLimpar = findViewById(R.id.btnLimpar);
         listView = findViewById(R.id.listView);
 
         btnConsultar.setOnClickListener(new View.OnClickListener() {
@@ -48,11 +50,19 @@ public class ProdutosCRUD extends AppCompatActivity {
                 realizarBusca();
             }
         });
+        btnLimpar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                limparCampo();
+            }
+        });
     }
 
     public void realizarBusca() {
         listView.setAdapter(null);
         try {
+            final ProgressDialog dialog = Helpers.showLoading(this, "Buscando produtos...");
+
             apiHandler.getProdutosLike(etCod.getText().toString(), new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
@@ -60,8 +70,9 @@ public class ProdutosCRUD extends AppCompatActivity {
                         setListaProdutos(response.toString());
                     } catch (Exception ex) {
                         Toast.makeText(ProdutosCRUD.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    } finally {
+                        dialog.cancel();
                     }
-
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -71,6 +82,8 @@ public class ProdutosCRUD extends AppCompatActivity {
                         Toast.makeText(ProdutosCRUD.this, content, Toast.LENGTH_LONG).show();
                     } catch (Exception ex) {
                         Toast.makeText(ProdutosCRUD.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    } finally {
+                        dialog.cancel();
                     }
                 }
             });
@@ -79,8 +92,9 @@ public class ProdutosCRUD extends AppCompatActivity {
         }
     }
 
-    public void limparCampo(int id) {
-
+    public void limparCampo() {
+        etCod.setText("");
+        realizarBusca();
     }
 
     public void setListaProdutos(String data) {

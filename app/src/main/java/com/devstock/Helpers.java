@@ -120,22 +120,20 @@ public class Helpers {
         editor.commit();
     }
 
-    public static void verificarSessao(Activity act, Response.Listener success, final Response.ErrorListener onError) throws Exception {
-        final Context ctx = act.getApplicationContext();
+    public static void verificarSessao(final Activity act, Response.Listener success, final Response.ErrorListener onError) throws Exception {
         ApiHandler handler = ApiHandler.getInstance(act);
+        String token = getPrefs(act, "AUTH_TOKEN");
 
-        if (ApiHandler.isLoggedIn()) {
-            handler.validateToken(success, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    ApiHandler.setToken(null);
+        handler.validateToken(token, success, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ApiHandler.setToken(null);
 
-                    if (onError != null) {
-                        onError.onErrorResponse(error);
-                    }
+                if (onError != null) {
+                    onError.onErrorResponse(error);
                 }
-            });
-        }
+            }
+        });
     }
 
     public static ProgressDialog showLoading(Context ctx, String text) {
