@@ -96,19 +96,39 @@ public class Helpers {
         return result;
     }
 
+    public static String getPrefs(Context ctx, String name) {
+        SharedPreferences pref = ctx.getSharedPreferences("devstock_prefs", Context.MODE_PRIVATE);
+
+        if (pref.contains(name)) {
+            return pref.getString(name, null);
+        } else {
+            return null;
+        }
+    }
+
+    public static void setPrefs(Context ctx, String name, String value) {
+        SharedPreferences.Editor editor = ctx.getSharedPreferences("devstock_prefs", Context.MODE_PRIVATE).edit();
+
+        editor.putString(name, value);
+        editor.commit();
+    }
+
+    public static void removePrefs(Context ctx, String name) {
+        SharedPreferences.Editor editor = ctx.getSharedPreferences("devstock_prefs", Context.MODE_PRIVATE).edit();
+
+        editor.remove(name);
+        editor.commit();
+    }
+
     public static void verificarSessao(Activity act, Response.Listener success, final Response.ErrorListener onError) throws Exception {
-        Context ctx = act.getApplicationContext();
-        final SharedPreferences pref = act.getSharedPreferences("devstock_prefs", Context.MODE_PRIVATE);
+        final Context ctx = act.getApplicationContext();
         ApiHandler handler = ApiHandler.getInstance(act);
 
-        if (pref.contains("token")) {
-            String token = pref.getString("token", "");
-            handler.validateToken(token, success, new Response.ErrorListener() {
+        if (ApiHandler.isLoggedIn()) {
+            handler.validateToken(success, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.remove("token");
-                    editor.apply();
+                    ApiHandler.setToken(null);
 
                     if (onError != null) {
                         onError.onErrorResponse(error);

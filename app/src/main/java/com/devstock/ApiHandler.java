@@ -18,8 +18,21 @@ import java.util.Map;
 public class ApiHandler {
     private static final String BASE_PATH = "http://devstock.herokuapp.com/api";
     private static HashMap<Context, ApiHandler> instances = new HashMap<Context, ApiHandler>();
+    private static String AUTH_TOKEN = null;
 
     private RequestQueue queue;
+
+    private ApiHandler(Activity act) {
+        Context ctx = act.getApplicationContext();
+        this.queue = Volley.newRequestQueue(ctx);
+        instances.put(ctx, this);
+    }
+
+    private static synchronized Map<String, String> getHeaders() {
+        Map<String, String> map = new HashMap<>();
+        map.put("Authorization", "Bearer " + AUTH_TOKEN);
+        return map;
+    }
 
     public static synchronized ApiHandler getInstance(Activity act) {
         Context ctx = act.getApplicationContext();
@@ -33,10 +46,12 @@ public class ApiHandler {
         return instances.get(ctx);
     }
 
-    private ApiHandler(Activity act) {
-        Context ctx = act.getApplicationContext();
-        this.queue = Volley.newRequestQueue(ctx);
-        instances.put(ctx, this);
+    public static synchronized void setToken(String token) {
+        AUTH_TOKEN = token;
+    }
+
+    public static synchronized boolean isLoggedIn() {
+        return (AUTH_TOKEN != null);
     }
 
     public void logInUser(String username, String password, Response.Listener success, Response.ErrorListener error) throws Exception {
@@ -48,60 +63,59 @@ public class ApiHandler {
         this.queue.add(new JsonObjectRequest(Request.Method.POST, BASE_PATH + "/login", body, success, error));
     }
 
-    public void validateToken(String token, Response.Listener success, Response.ErrorListener error) throws Exception {
-        JSONObject body = Helpers.createJsonObject("token", token);
+    public void validateToken(Response.Listener success, Response.ErrorListener error) throws Exception {
+        JSONObject body = Helpers.createJsonObject("token", AUTH_TOKEN);
 
         this.queue.add(new JsonObjectRequest(Request.Method.POST, BASE_PATH + "/check-token", body, success, error));
     }
 
-    public void getAllProdutos(final String token, Response.Listener success, Response.ErrorListener error) throws Exception {
-        this.queue.add(new JsonObjectRequest(Request.Method.GET, BASE_PATH + "/produtos/", null, success, error) {
+    public void getProdutosLike(String query, Response.Listener success, Response.ErrorListener error) {
+        this.queue.add(new JsonObjectRequest(Request.Method.GET, BASE_PATH + "/produtos/" + Uri.encode(query), null, success, error) {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> map = new HashMap<>();
-                map.put("Authorization", "Bearer " + token);
+                map.put("Authorization", "Bearer " + AUTH_TOKEN);
                 return map;
             }
         });
     }
 
-    public void getProdutosLike(String filter, final String token, Response.Listener success, Response.ErrorListener error) {
-        this.queue.add(new JsonObjectRequest(Request.Method.GET, BASE_PATH + "/produtos/" + Uri.encode(filter), null, success, error) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> map = new HashMap<>();
-                map.put("Authorization", "Bearer " + token);
-                return map;
-            }
-        });
-    }
-
-    public void getProduto(int idProduto, final String token, Response.Listener success, Response.ErrorListener error) {
+    public void getProduto(int idProduto, Response.Listener success, Response.ErrorListener error) {
         this.queue.add(new JsonObjectRequest(Request.Method.GET, BASE_PATH + "/produto/" + idProduto, null, success, error) {
             @Override
             public Map<String, String> getHeaders() {
-                Map<String, String> map = new HashMap<>();
-                map.put("Authorization", "Bearer " + token);
-                return map;
+                return ApiHandler.getHeaders();
             }
         });
     }
 
     public void newProduto(JSONObject dadosProduto, Response.Listener success, Response.ErrorListener error) {
-        this.queue.add(new JsonObjectRequest(Request.Method.POST, BASE_PATH + "/produto", dadosProduto, success, error));
-    }
-
-    public void setProduto(int idProduto, JSONObject dadosProduto, Response.Listener success, Response.ErrorListener error) {
-        this.queue.add(new JsonObjectRequest(Request.Method.PUT, BASE_PATH + "/produto/" + idProduto, dadosProduto, success, error));
-    }
-
-    public void deleteProduto(int idProduto, final String token, Response.Listener success, Response.ErrorListener error) {
-        this.queue.add(new JsonObjectRequest(Request.Method.DELETE, BASE_PATH + "/produto/" + idProduto, null, success, error) {
+        this.queue.add(new JsonObjectRequest(Request.Method.POST, BASE_PATH + "/produto", dadosProduto, success, error) {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> map = new HashMap<>();
-                map.put("Authorization", "Bearer " + token);
+                map.put("Authorization", "Bearer " + AUTH_TOKEN);
                 return map;
+            }
+        });
+    }
+
+    public void setProduto(int idProduto, JSONObject dadosProduto, Response.Listener success, Response.ErrorListener error) {
+        this.queue.add(new JsonObjectRequest(Request.Method.PUT, BASE_PATH + "/produto/" + idProduto, dadosProduto, success, error) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> map = new HashMap<>();
+                map.put("Authorization", "Bearer " + AUTH_TOKEN);
+                return map;
+            }
+        });
+    }
+
+    public void deleteProduto(int idProduto, Response.Listener success, Response.ErrorListener error) {
+        this.queue.add(new JsonObjectRequest(Request.Method.DELETE, BASE_PATH + "/produto/" + idProduto, null, success, error) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return ApiHandler.getHeaders();
             }
         });
     }

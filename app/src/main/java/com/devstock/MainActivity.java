@@ -19,7 +19,6 @@ import com.android.volley.VolleyError;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
-    SharedPreferences pref;
     ApiHandler apiHandler;
 
     EditText etLogin;
@@ -32,10 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        pref = getSharedPreferences("devstock_prefs", MODE_PRIVATE);
         apiHandler = ApiHandler.getInstance(this);
-
-        final Context ctx = this;
 
         etLogin = findViewById(R.id.etLogin);
         etSenha = findViewById(R.id.etSenha);
@@ -48,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
                 String login = etLogin.getText().toString(),
                         senha = etSenha.getText().toString();
 
-                final ProgressDialog dialog = Helpers.showLoading(ctx, "Realizando login...");
+                final ProgressDialog dialog = Helpers.showLoading(MainActivity.this, "Realizando login...");
 
                 try {
                     apiHandler.logInUser(login, senha, new Response.Listener() {
@@ -60,11 +56,13 @@ public class MainActivity extends AppCompatActivity {
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(ctx, "Usuário e/ou senha inválidos.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Usuário e/ou senha inválidos.", Toast.LENGTH_SHORT).show();
                             dialog.cancel();
                         }
                     });
-                } catch (Exception ex) { }
+                } catch (Exception ex) {
+                    Toast.makeText(MainActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -81,15 +79,13 @@ public class MainActivity extends AppCompatActivity {
             JSONObject json = Helpers.flattenJsonObject((JSONObject) data, null, null);
 
             if (json.has("status") && json.getString("status").equals("ok")) {
-
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putString("token", json.getString("data.token"));
-                editor.putString("name", json.getString("data.user.nm_usuario"));
-                editor.apply();
-
+                String token = json.getString("data.token");
+                ApiHandler.setToken(token);
                 openMenu();
             }
-        } catch (Exception ex) { }
+        } catch (Exception ex) {
+            Toast.makeText(MainActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void openMenu() {

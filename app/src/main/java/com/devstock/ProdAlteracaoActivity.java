@@ -14,7 +14,6 @@ import com.android.volley.VolleyError;
 
 public class ProdAlteracaoActivity extends AppCompatActivity {
     ApiHandler apiHandler;
-    SharedPreferences pref;
 
     Button btnCadastrar, btnAlterar, btnVoltar;
     EditText etCod, etDesc;
@@ -27,7 +26,6 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
         final Context ctx = this;
 
         apiHandler = ApiHandler.getInstance(this);
-        pref = getSharedPreferences("devstock_prefs", MODE_PRIVATE);
         btnCadastrar = findViewById(R.id.btnCadastrar);
         btnAlterar = findViewById(R.id.btnAlterar);
         btnVoltar = findViewById(R.id.btnVoltar);
@@ -40,24 +38,26 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
                 try {
                     apiHandler.newProduto(Helpers.createJsonObject(
                             "cod_produto", etCod.getText().toString(),
-                            "nm_produto", etDesc.getText().toString(),
-                            "token", pref.getString("token", "")
+                            "nm_produto", etDesc.getText().toString()
                     ), new Response.Listener() {
                         @Override
                         public void onResponse(Object response) {
-                            Toast.makeText(ctx, "Produto cadastrado com sucesso.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProdAlteracaoActivity.this, "Produto cadastrado com sucesso.", Toast.LENGTH_SHORT).show();
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             try {
                                 String content = new String(error.networkResponse.data, "UTF-8");
-                                Toast.makeText(ctx, content, Toast.LENGTH_LONG).show();
+                                Toast.makeText(ProdAlteracaoActivity.this, content, Toast.LENGTH_LONG).show();
                             } catch (Exception ex) {
+                                Toast.makeText(ProdAlteracaoActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         }
                     });
-                } catch (Exception ex) { }
+                } catch (Exception ex) {
+                    Toast.makeText(ProdAlteracaoActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

@@ -2,7 +2,6 @@ package com.devstock;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,11 +25,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ProdutosCRUD extends AppCompatActivity {
-    SharedPreferences pref;
     ApiHandler apiHandler;
 
     EditText etCod;
-    Button btnConsultar;
+    Button btnConsultar, btnLimpar;
     ListView listView;
 
     @Override
@@ -38,7 +36,6 @@ public class ProdutosCRUD extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_produtos_crud);
 
-        pref = getSharedPreferences("devstock_prefs", MODE_PRIVATE);
         apiHandler = ApiHandler.getInstance(this);
 
         etCod = findViewById(R.id.etCod);
@@ -48,32 +45,42 @@ public class ProdutosCRUD extends AppCompatActivity {
         btnConsultar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listView.setAdapter(null);
-                try {
-                    apiHandler.getProdutosLike(etCod.getText().toString(), pref.getString("token", ""), new Response.Listener() {
-                        @Override
-                        public void onResponse(Object response) {
-                            try {
-                                setListaProdutos(response.toString());
-                            } catch (Exception ex) {
-                                Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            try {
-                                String content = new String(error.networkResponse.data, "UTF-8");
-                                Toast.makeText(getApplicationContext(), content, Toast.LENGTH_LONG).show();
-                            } catch (Exception ex) {
-                                Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                } catch (Exception ex) { }
+                realizarBusca();
             }
         });
+    }
+
+    public void realizarBusca() {
+        listView.setAdapter(null);
+        try {
+            apiHandler.getProdutosLike(etCod.getText().toString(), new Response.Listener() {
+                @Override
+                public void onResponse(Object response) {
+                    try {
+                        setListaProdutos(response.toString());
+                    } catch (Exception ex) {
+                        Toast.makeText(ProdutosCRUD.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    try {
+                        String content = new String(error.networkResponse.data, "UTF-8");
+                        Toast.makeText(ProdutosCRUD.this, content, Toast.LENGTH_LONG).show();
+                    } catch (Exception ex) {
+                        Toast.makeText(ProdutosCRUD.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        } catch (Exception ex) {
+            Toast.makeText(ProdutosCRUD.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void limparCampo(int id) {
+
     }
 
     public void setListaProdutos(String data) {
@@ -100,10 +107,10 @@ public class ProdutosCRUD extends AppCompatActivity {
     }
 
     public void deleteProduto(int id) {
-        apiHandler.deleteProduto(id, pref.getString("token", ""), new Response.Listener() {
+        apiHandler.deleteProduto(id, new Response.Listener() {
             @Override
             public void onResponse(Object response) {
-                Toast.makeText(getApplicationContext(), "Produto excluído com sucesso", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProdutosCRUD.this, "Produto excluído com sucesso", Toast.LENGTH_SHORT).show();
                 btnConsultar.performClick();
             }
         }, new Response.ErrorListener() {
@@ -111,9 +118,9 @@ public class ProdutosCRUD extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 try {
                     String content = new String(error.networkResponse.data, "UTF-8");
-                    Toast.makeText(getApplicationContext(), content, Toast.LENGTH_LONG).show();
+                    Toast.makeText(ProdutosCRUD.this, content, Toast.LENGTH_LONG).show();
                 } catch (Exception ex) {
-                    Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProdutosCRUD.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -13,14 +13,11 @@ import android.widget.Button;
 
 public class MenuActivity extends AppCompatActivity {
     Button btnFornecedores, btnProdutos, btnMovimentacoes, btnUsuarios, btnConfiguracoes, btnSair;
-    SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
-        pref = getSharedPreferences("devstock_prefs", MODE_PRIVATE);
 
         btnFornecedores = findViewById(R.id.btnFornecedores);
         btnProdutos = findViewById(R.id.btnProdutos);
@@ -67,8 +64,8 @@ public class MenuActivity extends AppCompatActivity {
         btnSair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (pref.contains("token")) {
-                    pref.edit().remove("token").commit();
+                if (ApiHandler.isLoggedIn()) {
+                    ApiHandler.setToken(null);
                     startActivity(6);
                 }
             }

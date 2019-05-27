@@ -21,12 +21,11 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        pref = getSharedPreferences("devstock_prefs", MODE_PRIVATE);
         apiHandler = ApiHandler.getInstance(this);
 
         final Context ctx = this;
 
-        if (pref.contains("token")) {
+        if (ApiHandler.isLoggedIn()) {
             try {
                 Helpers.verificarSessao(this, new Response.Listener() {
                     @Override
