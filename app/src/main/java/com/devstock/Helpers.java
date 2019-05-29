@@ -141,6 +141,7 @@ public class Helpers {
         dialog.setTitle("Por favor, aguarde");
         dialog.setMessage(text);
         dialog.setIndeterminate(true);
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
         return dialog;
     }
@@ -153,16 +154,17 @@ public class Helpers {
             JsonObject obj = element.getAsJsonObject();
 
             if (obj.has("data")) {
-                element = obj.getAsJsonArray("data");
+                element = obj.get("data");
             }
         }
 
         return gson.fromJson(element, target);
     }
 
-    public static Date dateFromString(String date) throws Exception {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static String dateFromString(String date) throws Exception {
+        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"),
+                formatter = new SimpleDateFormat("dd/MM/YYYY HH:mm:ss");
 
-        return format.parse(date);
+        return formatter.format(parser.parse(date));
     }
 }

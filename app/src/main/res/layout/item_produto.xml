@@ -21,6 +21,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Nome do produto" />
+
+        <TextView
+            android:id="@+id/tvQtd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Quantidade" />
     </LinearLayout>
 
     <Button

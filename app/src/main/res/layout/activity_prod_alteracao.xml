@@ -21,7 +21,7 @@
             <LinearLayout
                 android:id="@+id/linearLayout2"
                 android:layout_width="0dp"
-                android:layout_height="432dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
@@ -68,39 +68,9 @@
                     android:id="@+id/etQtd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:editable="false"
+                    android:enabled="false"
                     android:ems="10"
                     android:hint="Quantidade"
-                    android:inputType="textPersonName" />
-
-                <TextView
-                    android:id="@+id/txtDtCad"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Data de Cadastro:" />
-
-                <EditText
-                    android:id="@+id/etDtCad"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:editable="false"
-                    android:ems="10"
-                    android:hint="Data de Cadastro"
-                    android:inputType="textPersonName" />
-
-                <TextView
-                    android:id="@+id/txtDtEdit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Ultima Edição:" />
-
-                <EditText
-                    android:id="@+id/etDtEdit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:editable="false"
-                    android:ems="10"
-                    android:hint="Data de Edição"
                     android:inputType="textPersonName" />
 
                 <TextView
@@ -117,16 +87,40 @@
                     android:hint="Fornecedor"
                     android:inputType="textPersonName" />
 
-                <CheckBox
-                    android:id="@+id/cbStatus"
+                <TextView
+                    android:id="@+id/txtDtCad"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Ativo" />
+                    android:text="Data de Cadastro:" />
+
+                <EditText
+                    android:id="@+id/etDtCad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:ems="10"
+                    android:hint="Data de Cadastro"
+                    android:inputType="textPersonName" />
+
+                <TextView
+                    android:id="@+id/txtDtEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ultima Edição:" />
+
+                <EditText
+                    android:id="@+id/etDtEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:ems="10"
+                    android:hint="Data de Edição"
+                    android:inputType="textPersonName" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="70dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
@@ -143,18 +137,12 @@
                     android:text="Voltar" />
 
                 <Button
-                    android:id="@+id/btnAlterar"
+                    android:id="@+id/btnSalvar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Alterar" />
+                    android:text="Salvar" />
 
-                <Button
-                    android:id="@+id/btnCadastrar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Cadastrar" />
             </LinearLayout>
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

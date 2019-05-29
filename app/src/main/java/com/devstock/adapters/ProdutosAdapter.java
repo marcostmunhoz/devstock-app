@@ -15,7 +15,6 @@ import com.devstock.models.Produto;
 import java.util.ArrayList;
 
 public class ProdutosAdapter extends ArrayAdapter<Produto> implements View.OnClickListener {
-    private ArrayList<Produto> dataset;
     private View.OnClickListener onItemClickListener;
     private View.OnClickListener onButtonClickListener;
 
@@ -23,7 +22,6 @@ public class ProdutosAdapter extends ArrayAdapter<Produto> implements View.OnCli
 
     public ProdutosAdapter(ArrayList<Produto> data, Context context) {
         super(context, R.layout.item_produto, data);
-        this.dataset = data;
         this.context = context;
     }
 
@@ -60,8 +58,9 @@ public class ProdutosAdapter extends ArrayAdapter<Produto> implements View.OnCli
         Produto p = getItem(position);
 
         if (p != null) {
-            TextView tvCod = v.findViewById(R.id.tvCod);
-            TextView tvNome = v.findViewById(R.id.tvNome);
+            TextView tvCod = v.findViewById(R.id.tvCod),
+                    tvNome = v.findViewById(R.id.tvNome),
+                    tvQtd = v.findViewById(R.id.tvQtd);
             Button btnExcluirProduto = v.findViewById(R.id.btnExcluirProduto);
 
             if (tvCod != null) {
@@ -70,6 +69,10 @@ public class ProdutosAdapter extends ArrayAdapter<Produto> implements View.OnCli
 
             if (tvNome != null) {
                 tvNome.setText(p.nmProduto);
+            }
+
+            if (tvQtd != null) {
+                tvQtd.setText("Quantidade: " + String.valueOf(p.nrQtdEstocada));
             }
 
             if (btnExcluirProduto != null) {

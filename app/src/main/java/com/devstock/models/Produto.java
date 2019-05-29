@@ -17,11 +17,11 @@ public class Produto implements IBaseModel {
         return this.flgStatus >= 1 ? true : false;
     }
 
-    public Date getDtCadastro() throws Exception {
+    public String getDtCadastro() throws Exception {
         return Helpers.dateFromString(this.dtCadastro);
     }
 
-    public Date getDtEdicao() throws Exception {
+    public String getDtEdicao() throws Exception {
         return Helpers.dateFromString(this.dtEdicao);
     }
 }
