@@ -11,6 +11,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Ids das tags -->
-    <item type="id" name="item_id" />
-    <item type="id" name="item_index" />
+    <item name="item_id" type="id" />
+    <item name="item_index" type="id" />
 </resources>
