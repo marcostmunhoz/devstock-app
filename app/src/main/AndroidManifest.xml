@@ -14,8 +14,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UsuariosActivity"></activity>
-        <activity android:name=".MenuActivity" />
         <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,6 +21,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".UsuariosActivity"></activity>
+        <activity android:name=".MenuActivity" />
+        <activity android:name=".movimentacao_cad"></activity>
         <activity android:name=".ProdutosActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".ProdAlteracaoActivity" />
