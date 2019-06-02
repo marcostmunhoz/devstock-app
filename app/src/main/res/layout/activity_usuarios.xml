@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProdutosActivity">
+    tools:context=".UsuariosActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -19,17 +19,17 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/txtCNPJ"
+            android:id="@+id/txtBusca"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="CNPJ, Razão Social ou Nome Fantasia" />
+            android:text="Nome ou Login" />
 
         <EditText
-            android:id="@+id/etCNPJ"
+            android:id="@+id/etBusca"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="CNPJ, Razão Social ou Nome Fantasia"
+            android:hint="Nome ou Login"
             android:inputType="textPersonName" />
 
     </LinearLayout>

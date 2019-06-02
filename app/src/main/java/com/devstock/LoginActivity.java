@@ -1,13 +1,9 @@
 package com.devstock;
 
-import android.app.Application;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +11,8 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.devstock.handlers.ApiHandler;
+import com.devstock.models.Usuario;
 
 import org.json.JSONObject;
 
@@ -56,12 +54,12 @@ public class LoginActivity extends AppCompatActivity {
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(LoginActivity.this, "Usuário e/ou senha inválidos.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Usuário e/ou senha inválidos.", Toast.LENGTH_LONG).show();
                             dialog.cancel();
                         }
                     });
                 } catch (Exception ex) {
-                    Toast.makeText(LoginActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -80,12 +78,15 @@ public class LoginActivity extends AppCompatActivity {
 
             if (json.has("status") && json.getString("status").equals("ok")) {
                 String token = json.getString("data.token");
+                Usuario usuario = Helpers.deserialize(((JSONObject) data).getJSONObject("data").getJSONObject("user").toString(), Usuario.class);
+
                 ApiHandler.setToken(token);
+                ApiHandler.setUser(usuario);
                 Helpers.setPrefs(this, "AUTH_TOKEN", token);
                 openMenu();
             }
         } catch (Exception ex) {
-            Toast.makeText(LoginActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 

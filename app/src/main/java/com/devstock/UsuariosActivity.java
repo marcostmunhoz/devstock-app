@@ -13,34 +13,33 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.devstock.adapters.ProdutosAdapter;
+import com.devstock.adapters.UsuariosAdapter;
 import com.devstock.handlers.ApiHandler;
-import com.devstock.models.Produto;
+import com.devstock.models.Usuario;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ProdutosActivity extends AppCompatActivity {
+public class UsuariosActivity extends AppCompatActivity {
     ApiHandler apiHandler;
-
-    EditText etCod;
+    EditText etBusca;
     Button btnConsultar, btnLimpar, btnCadastrar;
     ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_produtos_crud);
+        setContentView(R.layout.activity_usuarios);
 
         apiHandler = ApiHandler.getInstance(this);
 
-        etCod = findViewById(R.id.etCod);
+        etBusca = findViewById(R.id.etBusca);
         btnConsultar = findViewById(R.id.btnConsultar);
         btnLimpar = findViewById(R.id.btnLimpar);
         btnCadastrar = findViewById(R.id.btnCadastrar);
         listView = findViewById(R.id.listView);
 
-        if (!ApiHandler.permiteEditarProduto()) {
+        if (!ApiHandler.permiteEditarUsuario()) {
             btnCadastrar.setEnabled(false);
         }
 
@@ -53,7 +52,7 @@ public class ProdutosActivity extends AppCompatActivity {
 
         btnLimpar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 limparCampo();
             }
         });
@@ -61,7 +60,7 @@ public class ProdutosActivity extends AppCompatActivity {
         btnCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                abrirTelaProduto(null);
+                abrirTelaUsuario(null);
             }
         });
 
@@ -70,7 +69,7 @@ public class ProdutosActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+        if (requestCode == 3 && resultCode == Activity.RESULT_OK) {
             limparCampo();
         }
     }
@@ -78,15 +77,15 @@ public class ProdutosActivity extends AppCompatActivity {
     public void realizarBusca() {
         listView.setAdapter(null);
         try {
-            final ProgressDialog dialog = Helpers.showLoading(this, "Buscando produtos...");
+            final ProgressDialog dialog = Helpers.showLoading(this, "Buscando usuários...");
 
-            apiHandler.getProdutosLike(etCod.getText().toString(), new Response.Listener() {
+            apiHandler.getUsuariosLike(etBusca.getText().toString(), new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
                     try {
-                        setListaProdutos(response.toString());
+                        setListaUsuarios(response.toString());
                     } catch (Exception ex) {
-                        Toast.makeText(ProdutosActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(UsuariosActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                     } finally {
                         dialog.cancel();
                     }
@@ -96,52 +95,60 @@ public class ProdutosActivity extends AppCompatActivity {
                 public void onErrorResponse(VolleyError error) {
                     try {
                         String content = new String(error.networkResponse.data, "UTF-8");
-                        Toast.makeText(ProdutosActivity.this, content, Toast.LENGTH_LONG).show();
+                        Toast.makeText(UsuariosActivity.this, content, Toast.LENGTH_LONG).show();
                     } catch (Exception ex) {
-                        Toast.makeText(ProdutosActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(UsuariosActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                     } finally {
                         dialog.cancel();
                     }
                 }
             });
         } catch (Exception ex) {
-            Toast.makeText(ProdutosActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(UsuariosActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
     public void limparCampo() {
-        etCod.setText("");
+        etBusca.setText("");
         realizarBusca();
     }
 
-    public void setListaProdutos(String data) {
-        Produto[] produtos = Helpers.deserialize(data, Produto[].class);
-        ProdutosAdapter listProdutos = new ProdutosAdapter(new ArrayList<>(Arrays.asList(produtos)), this);
-        listProdutos.setOnItemClickListener(new View.OnClickListener() {
+    public void setListaUsuarios(String data) {
+        Usuario[] usus = Helpers.deserialize(data, Usuario[].class);
+        UsuariosAdapter listUsus = new UsuariosAdapter(new ArrayList<>(Arrays.asList(usus)), this);
+        listUsus.setOnItemClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int id = (Integer) v.getTag(R.id.item_id);
 
-                abrirTelaProduto(id);
+                abrirTelaUsuario(id);
             }
         });
-        listProdutos.setOnButtonClickListener(new View.OnClickListener() {
+        listUsus.setOnDeleteButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int id = (Integer) v.getTag(R.id.item_id);
 
-                deleteProduto(id);
+                deleteUsuario(id);
+            }
+        });
+        listUsus.setOnResetPasswordButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int id = (Integer) v.getTag(R.id.item_id);
+
+                //resetSenhaUsuario(id);
             }
         });
 
-        listView.setAdapter(listProdutos);
+        listView.setAdapter(listUsus);
     }
 
-    public void deleteProduto(int id) {
-        apiHandler.deleteProduto(id, new Response.Listener() {
+    public void deleteUsuario(int id) {
+        apiHandler.deleteUsuario(id, new Response.Listener() {
             @Override
             public void onResponse(Object response) {
-                Toast.makeText(ProdutosActivity.this, "Produto excluído com sucesso", Toast.LENGTH_LONG).show();
+                Toast.makeText(UsuariosActivity.this, "Usuário excluído com sucesso", Toast.LENGTH_LONG).show();
                 realizarBusca();
             }
         }, new Response.ErrorListener() {
@@ -149,19 +156,23 @@ public class ProdutosActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 try {
                     String content = new String(error.networkResponse.data, "UTF-8");
-                    Toast.makeText(ProdutosActivity.this, content, Toast.LENGTH_LONG).show();
+                    Toast.makeText(UsuariosActivity.this, content, Toast.LENGTH_LONG).show();
                 } catch (Exception ex) {
-                    Toast.makeText(ProdutosActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(UsuariosActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
-    public void abrirTelaProduto(Integer id) {
-        Intent intent = new Intent(this, ProdAlteracaoActivity.class);
+//    public void resetSenhaUsuario(int id) {
+//
+//    }
+
+    public void abrirTelaUsuario(Integer id) {
+        Intent intent = new Intent(this, FornAlteracaoActivity.class);
         if (id != null) {
-            intent.putExtra("id_produto", id);
+            intent.putExtra("id_usuario", id);
         }
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, 3);
     }
 }

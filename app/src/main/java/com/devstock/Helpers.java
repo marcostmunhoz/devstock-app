@@ -2,13 +2,13 @@ package com.devstock;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.arch.core.util.Function;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.devstock.handlers.ApiHandler;
+import com.devstock.models.BaseModel;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -21,7 +21,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Iterator;
 
 public class Helpers {
@@ -128,6 +127,7 @@ public class Helpers {
             @Override
             public void onErrorResponse(VolleyError error) {
                 ApiHandler.setToken(null);
+                ApiHandler.setUser(null);
 
                 if (onError != null) {
                     onError.onErrorResponse(error);
@@ -161,10 +161,38 @@ public class Helpers {
         return gson.fromJson(element, target);
     }
 
+    public static JSONObject serialize(BaseModel model, Class source) throws Exception {
+        Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                                    .excludeFieldsWithoutExposeAnnotation()
+                                    .create();
+
+        return new JSONObject(gson.toJson(model, source));
+    }
+
     public static String dateFromString(String date) throws Exception {
         SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"),
                 formatter = new SimpleDateFormat("dd/MM/YYYY HH:mm:ss");
 
         return formatter.format(parser.parse(date));
+    }
+
+    public static String formatString(String mask, String value) {
+        try {
+            String result = "";
+            int index = 0;
+
+            for (char c : mask.toCharArray()) {
+                if (c == '#') {
+                    result += value.charAt(index);
+                    index++;
+                } else {
+                    result += c;
+                }
+            }
+
+            return result;
+        } catch (Exception ex) {
+            return value;
+        }
     }
 }

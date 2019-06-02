@@ -1,18 +1,15 @@
 package com.devstock;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 
+import com.devstock.handlers.ApiHandler;
+
 public class MenuActivity extends AppCompatActivity {
-    Button btnFornecedores, btnProdutos, btnMovimentacoes, btnUsuarios, btnConfiguracoes, btnSair;
+    Button btnFornecedores, btnProdutos, btnMovimentacoes, btnUsuarios, btnSair;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +20,6 @@ public class MenuActivity extends AppCompatActivity {
         btnProdutos = findViewById(R.id.btnProdutos);
         btnMovimentacoes = findViewById(R.id.btnMovimentacoes);
         btnUsuarios = findViewById(R.id.btnUsuarios);
-        btnConfiguracoes = findViewById(R.id.btnConfiguracoes);
         btnSair = findViewById(R.id.btnSair);
 
         btnFornecedores.setOnClickListener(new View.OnClickListener() {
@@ -54,20 +50,14 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        btnUsuarios.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(5);
-            }
-        });
-
         btnSair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (ApiHandler.isLoggedIn()) {
                     ApiHandler.setToken(null);
+                    ApiHandler.setUser(null);
                     Helpers.removePrefs(MenuActivity.this, "AUTH_TOKEN");
-                    startActivity(6);
+                    startActivity(5);
                 }
             }
         });
@@ -78,7 +68,7 @@ public class MenuActivity extends AppCompatActivity {
 
         switch (tela) {
             case 1:
-                intent = new Intent(this, FornecedoresCRUD.class);
+                intent = new Intent(this, FornecedoresActivity.class);
                 break;
             case 2:
                 intent = new Intent(this, ProdutosActivity.class);
@@ -87,12 +77,9 @@ public class MenuActivity extends AppCompatActivity {
                 intent = new Intent(this, Movimentacao.class);
                 break;
             case 4:
-                //intent = new Intent(this, Usuarios.class);
+                intent = new Intent(this, UsuariosActivity.class);
                 break;
             case 5:
-                //intent = new Intent(this, Configuracoes.class);
-                break;
-            case 6:
                 intent = new Intent(this, LoginActivity.class);
                 super.startActivity(intent);
                 finish();

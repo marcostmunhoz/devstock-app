@@ -1,27 +1,30 @@
 package com.devstock.models;
 
-import com.devstock.Helpers;
+import com.google.gson.annotations.Expose;
 
-import java.util.Date;
-
-public class Produto implements IBaseModel {
+public class Produto extends BaseModel {
+    @Expose
     public Integer idProduto;
+    @Expose
     public String codProduto;
+    @Expose
     public String nmProduto;
-    private Integer flgStatus;
+    @Expose
     public Integer nrQtdEstocada;
-    private String dtCadastro;
-    private String dtEdicao;
+    @Expose
+    public Integer idFornecedor;
+    public Fornecedor fornecedor;
 
-    public boolean getFlgStatus() {
-        return this.flgStatus >= 1 ? true : false;
+    public Produto(Integer idProduto, String codProduto, String nmProduto, Integer nrQtdEstocada, Integer idFornecedor, Fornecedor fornecedor) {
+        this.idProduto = idProduto;
+        this.codProduto = codProduto;
+        this.nmProduto = nmProduto;
+        this.nrQtdEstocada = nrQtdEstocada;
+        this.idFornecedor = idFornecedor;
+        this.fornecedor = fornecedor;
     }
 
-    public String getDtCadastro() throws Exception {
-        return Helpers.dateFromString(this.dtCadastro);
-    }
-
-    public String getDtEdicao() throws Exception {
-        return Helpers.dateFromString(this.dtEdicao);
+    public Produto() {
+        this(null, null, null, null, null, null);
     }
 }

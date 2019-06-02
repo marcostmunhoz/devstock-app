@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.devstock.handlers.ApiHandler;
 import com.devstock.R;
 import com.devstock.models.Produto;
 
@@ -78,6 +78,10 @@ public class ProdutosAdapter extends ArrayAdapter<Produto> implements View.OnCli
             if (btnExcluirProduto != null) {
                 btnExcluirProduto.setOnClickListener(this);
                 btnExcluirProduto.setTag(R.id.item_id, p.idProduto);
+
+                if (!ApiHandler.permiteEditarProduto()) {
+                    btnExcluirProduto.setEnabled(false);
+                }
             }
 
             v.setTag(R.id.item_id, p.idProduto);

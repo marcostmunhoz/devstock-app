@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProdAlteracaoActivity">
+    tools:context=".FornAlteracaoActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="0dp"
-        android:layout_height="432dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -19,13 +19,13 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/txtCod"
+            android:id="@+id/txtCnpj"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="CNPJ:" />
 
         <EditText
-            android:id="@+id/etCod"
+            android:id="@+id/etCNPJ"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -33,13 +33,13 @@
             android:inputType="textPersonName" />
 
         <TextView
-            android:id="@+id/txtDesc"
+            android:id="@+id/txtRazao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Razão Social:" />
 
         <EditText
-            android:id="@+id/etDesc"
+            android:id="@+id/etRazao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -47,13 +47,13 @@
             android:inputType="textPersonName" />
 
         <TextView
-            android:id="@+id/txtQtd"
+            android:id="@+id/txtNomeFantasia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Nome Fantasia:" />
 
         <EditText
-            android:id="@+id/etQtd"
+            android:id="@+id/etNomeFantasia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -61,17 +61,45 @@
             android:inputType="textPersonName" />
 
         <TextView
-            android:id="@+id/txtDCad"
+            android:id="@+id/txtEnd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Endereço:" />
 
         <EditText
-            android:id="@+id/etDCad"
+            android:id="@+id/etEnd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Endereço"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/txtFone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Telefone:" />
+
+        <EditText
+            android:id="@+id/etFone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Telefone"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/txtEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="E-mail:" />
+
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="E-mail"
             android:inputType="textPersonName" />
 
         <TextView
@@ -85,6 +113,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:enabled="false"
             android:hint="Data de Cadastro"
             android:inputType="textPersonName" />
 
@@ -99,19 +128,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:enabled="false"
             android:hint="Data de Edição"
             android:inputType="textPersonName" />
 
-        <CheckBox
-            android:id="@+id/cbStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ativo" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -128,10 +153,10 @@
             android:text="Voltar" />
 
         <Button
-            android:id="@+id/btnAlterar"
+            android:id="@+id/btnSalvar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Alterar" />
+            android:text="Salvar" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

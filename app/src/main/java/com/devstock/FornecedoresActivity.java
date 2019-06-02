@@ -13,34 +13,33 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.devstock.adapters.ProdutosAdapter;
+import com.devstock.adapters.FornecedorAdapter;
 import com.devstock.handlers.ApiHandler;
-import com.devstock.models.Produto;
+import com.devstock.models.Fornecedor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ProdutosActivity extends AppCompatActivity {
+public class FornecedoresActivity extends AppCompatActivity {
     ApiHandler apiHandler;
-
-    EditText etCod;
+    EditText etCnpj;
     Button btnConsultar, btnLimpar, btnCadastrar;
     ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_produtos_crud);
+        setContentView(R.layout.activity_fornecedores);
 
         apiHandler = ApiHandler.getInstance(this);
 
-        etCod = findViewById(R.id.etCod);
+        etCnpj = findViewById(R.id.etCNPJ);
         btnConsultar = findViewById(R.id.btnConsultar);
         btnLimpar = findViewById(R.id.btnLimpar);
         btnCadastrar = findViewById(R.id.btnCadastrar);
         listView = findViewById(R.id.listView);
 
-        if (!ApiHandler.permiteEditarProduto()) {
+        if (!ApiHandler.permiteEditarFornecedor()) {
             btnCadastrar.setEnabled(false);
         }
 
@@ -53,7 +52,7 @@ public class ProdutosActivity extends AppCompatActivity {
 
         btnLimpar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 limparCampo();
             }
         });
@@ -61,7 +60,7 @@ public class ProdutosActivity extends AppCompatActivity {
         btnCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                abrirTelaProduto(null);
+                abrirTelaFornecedor(null);
             }
         });
 
@@ -78,15 +77,15 @@ public class ProdutosActivity extends AppCompatActivity {
     public void realizarBusca() {
         listView.setAdapter(null);
         try {
-            final ProgressDialog dialog = Helpers.showLoading(this, "Buscando produtos...");
+            final ProgressDialog dialog = Helpers.showLoading(this, "Buscando fornecedores...");
 
-            apiHandler.getProdutosLike(etCod.getText().toString(), new Response.Listener() {
+            apiHandler.getFornecedoresLike(etCnpj.getText().toString(), new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
                     try {
-                        setListaProdutos(response.toString());
+                        setListaForns(response.toString());
                     } catch (Exception ex) {
-                        Toast.makeText(ProdutosActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(FornecedoresActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                     } finally {
                         dialog.cancel();
                     }
@@ -96,52 +95,52 @@ public class ProdutosActivity extends AppCompatActivity {
                 public void onErrorResponse(VolleyError error) {
                     try {
                         String content = new String(error.networkResponse.data, "UTF-8");
-                        Toast.makeText(ProdutosActivity.this, content, Toast.LENGTH_LONG).show();
+                        Toast.makeText(FornecedoresActivity.this, content, Toast.LENGTH_LONG).show();
                     } catch (Exception ex) {
-                        Toast.makeText(ProdutosActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(FornecedoresActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                     } finally {
                         dialog.cancel();
                     }
                 }
             });
         } catch (Exception ex) {
-            Toast.makeText(ProdutosActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(FornecedoresActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
     public void limparCampo() {
-        etCod.setText("");
+        etCnpj.setText("");
         realizarBusca();
     }
 
-    public void setListaProdutos(String data) {
-        Produto[] produtos = Helpers.deserialize(data, Produto[].class);
-        ProdutosAdapter listProdutos = new ProdutosAdapter(new ArrayList<>(Arrays.asList(produtos)), this);
-        listProdutos.setOnItemClickListener(new View.OnClickListener() {
+    public void setListaForns(String data) {
+        Fornecedor[] forns = Helpers.deserialize(data, Fornecedor[].class);
+        FornecedorAdapter listForns = new FornecedorAdapter(new ArrayList<>(Arrays.asList(forns)), this);
+        listForns.setOnItemClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int id = (Integer) v.getTag(R.id.item_id);
 
-                abrirTelaProduto(id);
+                abrirTelaFornecedor(id);
             }
         });
-        listProdutos.setOnButtonClickListener(new View.OnClickListener() {
+        listForns.setOnButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int id = (Integer) v.getTag(R.id.item_id);
 
-                deleteProduto(id);
+                deleteFornecedor(id);
             }
         });
 
-        listView.setAdapter(listProdutos);
+        listView.setAdapter(listForns);
     }
 
-    public void deleteProduto(int id) {
-        apiHandler.deleteProduto(id, new Response.Listener() {
+    public void deleteFornecedor(int id) {
+        apiHandler.deleteFornecedor(id, new Response.Listener() {
             @Override
             public void onResponse(Object response) {
-                Toast.makeText(ProdutosActivity.this, "Produto excluído com sucesso", Toast.LENGTH_LONG).show();
+                Toast.makeText(FornecedoresActivity.this, "Fornecedor excluído com sucesso", Toast.LENGTH_LONG).show();
                 realizarBusca();
             }
         }, new Response.ErrorListener() {
@@ -149,18 +148,18 @@ public class ProdutosActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 try {
                     String content = new String(error.networkResponse.data, "UTF-8");
-                    Toast.makeText(ProdutosActivity.this, content, Toast.LENGTH_LONG).show();
+                    Toast.makeText(FornecedoresActivity.this, content, Toast.LENGTH_LONG).show();
                 } catch (Exception ex) {
-                    Toast.makeText(ProdutosActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(FornecedoresActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
-    public void abrirTelaProduto(Integer id) {
-        Intent intent = new Intent(this, ProdAlteracaoActivity.class);
+    public void abrirTelaFornecedor(Integer id) {
+        Intent intent = new Intent(this, FornAlteracaoActivity.class);
         if (id != null) {
-            intent.putExtra("id_produto", id);
+            intent.putExtra("id_fornecedor", id);
         }
         startActivityForResult(intent, 1);
     }

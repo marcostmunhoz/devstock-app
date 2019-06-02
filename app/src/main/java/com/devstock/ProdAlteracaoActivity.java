@@ -2,28 +2,32 @@ package com.devstock;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.devstock.adapters.FornecedorAdapter;
+import com.devstock.handlers.ApiHandler;
+import com.devstock.models.Fornecedor;
 import com.devstock.models.Produto;
 
-import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ProdAlteracaoActivity extends AppCompatActivity {
     ApiHandler apiHandler;
 
     Button btnSalvar, btnVoltar;
-    EditText etCod, etDesc, etQtd, etDtCad, etDtEdit, etForn;
+    EditText etCod, etDesc, etQtd, etDtCad, etDtEdit;
+    Spinner spinForn;
     Integer idProduto = null;
 
     @Override
@@ -39,25 +43,40 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
         etQtd = findViewById(R.id.etQtd);
         etDtCad = findViewById(R.id.etDtCad);
         etDtEdit = findViewById(R.id.etDtEdit);
-        etForn = findViewById(R.id.etForn);
+        spinForn = findViewById(R.id.spinForn);
+
+        if (!ApiHandler.permiteEditarProduto()) {
+            btnSalvar.setEnabled(false);
+        }
 
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (ProdAlteracaoActivity.this.idProduto != null) {
-                    editarProduto();
-                } else {
-                    cadastrarProduto();
-                }
+            if (ProdAlteracaoActivity.this.idProduto != null) {
+                editarProduto();
+            } else {
+                cadastrarProduto();
+            }
             }
         });
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setResult(Activity.RESULT_OK);
-                finish();
+            setResult(Activity.RESULT_OK);
+            finish();
+            }
+        });
+
+        spinForn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
@@ -71,18 +90,24 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
                 getProduto(idProduto);
             }
         }
+
+        getFornecedores();
     }
 
-    public void getProduto(int id) {
-        apiHandler.getProduto(idProduto, new Response.Listener() {
+    public void getFornecedores() {
+        spinForn.setAdapter(null);
+
+        final ProgressDialog dialog = Helpers.showLoading(this, "Carregando lista de fornecedores...");
+
+        apiHandler.getFornecedores(new Response.Listener() {
             @Override
             public void onResponse(Object response) {
                 try {
-                    Produto p = Helpers.deserialize(response.toString(), Produto.class);
-
-                    carregarInfosProduto(p);
+                    carregaFornecedores(response.toString());
                 } catch (Exception ex) {
                     Toast.makeText(ProdAlteracaoActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                } finally {
+                    dialog.cancel();
                 }
             }
         }, new Response.ErrorListener() {
@@ -93,7 +118,47 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
                     Toast.makeText(ProdAlteracaoActivity.this, content, Toast.LENGTH_LONG).show();
                 } catch (Exception ex) {
                     Toast.makeText(ProdAlteracaoActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                } finally {
+                    dialog.cancel();
                 }
+            }
+        });
+    }
+
+    public void carregaFornecedores(String data) {
+        Fornecedor[] fornecedores = Helpers.deserialize(data, Fornecedor[].class);
+        FornecedorAdapter adapter = new FornecedorAdapter(new ArrayList<>(Arrays.asList(fornecedores)), this);
+        adapter.setSimple(true);
+        spinForn.setAdapter(adapter);
+    }
+
+    public void getProduto(int id) {
+        final ProgressDialog dialog = Helpers.showLoading(this, "Carregando informações do produto...");
+
+        apiHandler.getProduto(idProduto, new Response.Listener() {
+            @Override
+            public void onResponse(Object response) {
+            try {
+                Produto p = Helpers.deserialize(response.toString(), Produto.class);
+
+                carregarInfosProduto(p);
+            } catch (Exception ex) {
+                Toast.makeText(ProdAlteracaoActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+            } finally {
+                dialog.cancel();
+            }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            try {
+                String content = new String(error.networkResponse.data, "UTF-8");
+                Toast.makeText(ProdAlteracaoActivity.this, content, Toast.LENGTH_LONG).show();
+            } catch (Exception ex) {
+                Toast.makeText(ProdAlteracaoActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+            } finally {
+                dialog.cancel();
+            }
             }
         });
     }
@@ -103,8 +168,8 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
             etCod.setText(p.codProduto);
             etDesc.setText(p.nmProduto);
             etQtd.setText(String.valueOf(p.nrQtdEstocada));
-            etDtCad.setText(p.getDtCadastro().toString());
-            etDtEdit.setText(p.getDtEdicao().toString());
+            etDtCad.setText(p.getDtCadastro());
+            etDtEdit.setText(p.getDtEdicao());
         } else {
             throw new Exception("Produto não encontrado.");
         }
@@ -113,15 +178,20 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
     public void cadastrarProduto() {
         try {
             final ProgressDialog dialog = Helpers.showLoading(this, "Realizando cadastro...");
+            Produto p = new Produto(
+                    null,
+                    etCod.getText().toString(),
+                    etDesc.getText().toString(),
+                    Integer.parseInt(etQtd.getText().toString()),
+                    null,
+                    null
+            );
 
-            apiHandler.newProduto(Helpers.createJsonObject(
-                    "cod_produto", etCod.getText().toString(),
-                    "nm_produto", etDesc.getText().toString()
-            ), new Response.Listener() {
+            apiHandler.newProduto(p, new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
                     dialog.cancel();
-                    Toast.makeText(ProdAlteracaoActivity.this, "Produto cadastrado com sucesso.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProdAlteracaoActivity.this, "Produto cadastrado com sucesso.", Toast.LENGTH_LONG).show();
 
                     try {
                         Produto p = Helpers.deserialize(response.toString(), Produto.class);
@@ -154,17 +224,20 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
     public void editarProduto() {
         try {
             final ProgressDialog dialog = Helpers.showLoading(this, "Salvando alterações...");
-
-            JSONObject obj = Helpers.createJsonObject(
-                    "cod_produto", etCod.getText().toString(),
-                    "nm_produto", etDesc.getText().toString()
+            Produto p = new Produto(
+                    idProduto,
+                    etCod.getText().toString(),
+                    etDesc.getText().toString(),
+                    Integer.parseInt(etQtd.getText().toString()),
+                    null,
+                    null
             );
 
-            apiHandler.setProduto(idProduto, obj, new Response.Listener() {
+            apiHandler.setProduto(p, new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
                     dialog.cancel();
-                    Toast.makeText(ProdAlteracaoActivity.this, "Produto editado com sucesso.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProdAlteracaoActivity.this, "Produto editado com sucesso.", Toast.LENGTH_LONG).show();
 
                     try {
                         Produto p = Helpers.deserialize(response.toString(), Produto.class);
