@@ -1,6 +1,6 @@
 package com.devstock.models;
 
-import com.devstock.Helpers;
+import com.devstock.helpers.Helpers;
 import com.google.gson.annotations.Expose;
 
 public class BaseModel {

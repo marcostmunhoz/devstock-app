@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.devstock.handlers.ApiHandler;
+import com.devstock.helpers.Helpers;
 
 public class MenuActivity extends AppCompatActivity {
     Button btnFornecedores, btnProdutos, btnMovimentacoes, btnUsuarios, btnSair;

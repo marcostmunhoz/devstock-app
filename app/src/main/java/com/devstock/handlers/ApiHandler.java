@@ -9,7 +9,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.devstock.Helpers;
+import com.devstock.helpers.Helpers;
 import com.devstock.models.Fornecedor;
 import com.devstock.models.Produto;
 import com.devstock.models.Usuario;

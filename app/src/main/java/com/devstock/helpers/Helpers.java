@@ -1,4 +1,4 @@
-package com.devstock;
+package com.devstock.helpers;
 
 import android.app.Activity;
 import android.app.ProgressDialog;

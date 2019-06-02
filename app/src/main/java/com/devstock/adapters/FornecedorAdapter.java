@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.devstock.handlers.ApiHandler;
-import com.devstock.Helpers;
+import com.devstock.helpers.Helpers;
 import com.devstock.R;
 import com.devstock.models.Fornecedor;
 

@@ -17,18 +17,18 @@
         <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UsuariosActivity"></activity>
-        <activity android:name=".MenuActivity" />
-        <activity android:name=".movimentacao_cad"></activity>
-        <activity android:name=".ProdutosActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".ProdAlteracaoActivity" />
+        <activity android:name=".MenuActivity" />
         <activity android:name=".FornecedoresActivity" />
         <activity android:name=".FornAlteracaoActivity" />
+        <activity android:name=".ProdutosActivity" />
+        <activity android:name=".ProdAlteracaoActivity" />
+        <activity android:name=".UsuariosActivity" />
+        <activity android:name=".MovCadastroActivity" />
     </application>
 
 </manifest>
