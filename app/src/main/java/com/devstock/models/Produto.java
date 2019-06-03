@@ -13,6 +13,7 @@ public class Produto extends BaseModel {
     public Integer nrQtdEstocada;
     @Expose
     public Integer idFornecedor;
+    @Expose (serialize = false)
     public Fornecedor fornecedor;
 
     public Produto(Integer idProduto, String codProduto, String nmProduto, Integer nrQtdEstocada, Integer idFornecedor, Fornecedor fornecedor) {

@@ -169,11 +169,17 @@ public class Helpers {
         return new JSONObject(gson.toJson(model, source));
     }
 
-    public static String dateFromString(String date) throws Exception {
+    public static String dateFromString(String date, boolean dateOnly) throws Exception {
+        String destFormat = (dateOnly ? "dd/MM/YYYY" : "dd/MM/YYYY HH:mm:ss");
+
         SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"),
-                formatter = new SimpleDateFormat("dd/MM/YYYY HH:mm:ss");
+                formatter = new SimpleDateFormat(destFormat);
 
         return formatter.format(parser.parse(date));
+    }
+
+    public static String dateFromString(String date) throws Exception {
+        return dateFromString(date, false);
     }
 
     public static String formatString(String mask, String value) {

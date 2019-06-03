@@ -78,7 +78,7 @@ public class MenuActivity extends AppCompatActivity {
                 intent = new Intent(this, ProdutosActivity.class);
                 break;
             case 3:
-                intent = new Intent(this, Movimentacao.class);
+                intent = new Intent(this, MovimentacoesActivity.class);
                 break;
             case 4:
                 intent = new Intent(this, UsuariosActivity.class);

@@ -225,13 +225,6 @@ public class ApiHandler {
         });
     }
 
-    public void getUsuarios(Response.Listener success, Response.ErrorListener error) {
-        this.queue.add(new JsonObjectRequest(Request.Method.GET, BASE_PATH + "/usuarios", null, success, error) {
-            @Override
-            public Map<String, String> getHeaders() { return ApiHandler.getHeaders(); }
-        });
-    }
-
     public void getUsuariosLike(String query, Response.Listener success, Response.ErrorListener error) {
         this.queue.add(new JsonObjectRequest(Request.Method.GET, BASE_PATH + "/usuarios/" + Uri.encode(query), null, success, error) {
             @Override
@@ -282,6 +275,22 @@ public class ApiHandler {
     }
 
     public void resetSenhaUsuario(int idUsu, Response.Listener success, Response.ErrorListener error) {
+        this.queue.add(new JsonObjectRequest(Request.Method.GET, BASE_PATH + "/usuario/resetar-senha/" + idUsu, null, success, error) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return ApiHandler.getHeaders();
+            }
+        });
+    }
 
+    public void alteraSenhaUsuario(int idUsu, String senhaNova, Response.Listener success, Response.ErrorListener error) throws Exception {
+        JSONObject data = Helpers.createJsonObject("password", senhaNova);
+
+        this.queue.add(new JsonObjectRequest(Request.Method.PUT, BASE_PATH + "/usuario/alterar-senha/" + idUsu, data, success, error) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return ApiHandler.getHeaders();
+            }
+        });
     }
  }

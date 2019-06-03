@@ -138,7 +138,7 @@ public class UsuariosActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int id = (Integer) v.getTag(R.id.item_id);
 
-                //resetSenhaUsuario(id);
+                resetSenhaUsuario(id);
             }
         });
 
@@ -165,9 +165,24 @@ public class UsuariosActivity extends AppCompatActivity {
         });
     }
 
-//    public void resetSenhaUsuario(int id) {
-//
-//    }
+    public void resetSenhaUsuario(int id) {
+        apiHandler.resetSenhaUsuario(id, new Response.Listener() {
+            @Override
+            public void onResponse(Object response) {
+                Toast.makeText(UsuariosActivity.this, "Senha resetada com sucesso", Toast.LENGTH_LONG).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                try {
+                    String content = new String(error.networkResponse.data, "UTF-8");
+                    Toast.makeText(UsuariosActivity.this, content, Toast.LENGTH_LONG).show();
+                } catch (Exception ex) {
+                    Toast.makeText(UsuariosActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
 
     public void abrirTelaUsuario(Integer id) {
         Intent intent = new Intent(this, FornAlteracaoActivity.class);
