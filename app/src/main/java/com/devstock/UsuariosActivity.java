@@ -185,7 +185,7 @@ public class UsuariosActivity extends AppCompatActivity {
     }
 
     public void abrirTelaUsuario(Integer id) {
-        Intent intent = new Intent(this, FornAlteracaoActivity.class);
+        Intent intent = new Intent(this, UsuAlteracaoActivity.class);
         if (id != null) {
             intent.putExtra("id_usuario", id);
         }

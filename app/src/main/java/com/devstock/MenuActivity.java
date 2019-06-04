@@ -17,9 +17,6 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Mostrar o botão
-        getSupportActionBar().setHomeButtonEnabled(true);      //Ativar o botão
-
         btnFornecedores = findViewById(R.id.btnFornecedores);
         btnProdutos = findViewById(R.id.btnProdutos);
         btnMovimentacoes = findViewById(R.id.btnMovimentacoes);

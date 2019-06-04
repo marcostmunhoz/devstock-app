@@ -170,7 +170,7 @@ public class Helpers {
     }
 
     public static String dateFromString(String date, boolean dateOnly) throws Exception {
-        String destFormat = (dateOnly ? "dd/MM/YYYY" : "dd/MM/YYYY HH:mm:ss");
+        String destFormat = (dateOnly ? "dd/MM/yyyy" : "dd/MM/yyyy HH:mm:ss");
 
         SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"),
                 formatter = new SimpleDateFormat(destFormat);
