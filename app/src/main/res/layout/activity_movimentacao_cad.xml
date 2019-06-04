@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".movimentacao_cad">
+    tools:context=".MovCadastroActivity">
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        tools:layout_editor_absoluteY="0dp"
+        app:layout_constraintStart_toStartOf="parent">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -50,18 +51,18 @@
                 </RadioGroup>
 
                 <EditText
-                    android:id="@+id/editText"
+                    android:id="@+id/etDtHrMovimentacao"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
                     android:hint="Data e Hora"
-                    android:inputType="textPersonName" />
+                    android:inputType="date" />
 
             </LinearLayout>
 
             <EditText
-                android:id="@+id/editText3"
+                android:id="@+id/etDesc"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="7dp"
@@ -75,7 +76,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout7" />
 
             <EditText
-                android:id="@+id/editText4"
+                android:id="@+id/etProd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -95,26 +96,26 @@
                 app:layout_constraintTop_toBottomOf="@+id/editText4">
 
                 <EditText
-                    android:id="@+id/editText9"
+                    android:id="@+id/etQtd"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
                     android:hint="Quantidade"
-                    android:inputType="textPersonName" />
+                    android:inputType="number" />
 
                 <EditText
-                    android:id="@+id/editText8"
+                    android:id="@+id/qtVlrUnitario"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
                     android:hint="Valor Unitário"
-                    android:inputType="textPersonName" />
+                    android:inputType="numberDecimal" />
             </LinearLayout>
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/btnAddProd"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -127,6 +128,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout8" />
 
             <ListView
+                android:id="@+id/listView"
                 android:layout_width="405dp"
                 android:layout_height="444dp"
                 android:layout_marginTop="16dp"
