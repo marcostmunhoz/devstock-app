@@ -21,7 +21,7 @@ public class UsuAlteracaoActivity extends AppCompatActivity {
     ApiHandler apiHandler;
 
     Button btnSalvar, btnVoltar;
-    EditText etNmUsuario, etLogin, etEmail, etDtCad, etDtEdit;
+    EditText etNmUsuario, etLogin, etPassword, etEmail, etDtCad, etDtEdit;
     CheckBox cbFlgEditUsu, cbFlgEditForn, cbFlgEditProd, cbFlgMov;
     Integer idUsuario = null;
 
@@ -36,6 +36,7 @@ public class UsuAlteracaoActivity extends AppCompatActivity {
         btnVoltar = findViewById(R.id.btnVoltar);
         etNmUsuario = findViewById(R.id.etNmUsuario);
         etLogin = findViewById(R.id.etLogin);
+        etPassword = findViewById(R.id.etPassword);
         etEmail = findViewById(R.id.etEmail);
         etDtCad = findViewById(R.id.etDtCad);
         etDtEdit = findViewById(R.id.etDtEdit);
@@ -74,6 +75,7 @@ public class UsuAlteracaoActivity extends AppCompatActivity {
 
             if (bundle != null && bundle.containsKey("id_usuario")) {
                 idUsuario = bundle.getInt("id_usuario");
+                etPassword.setEnabled(false);
 
                 getUsuario(idUsuario);
             }
@@ -134,6 +136,7 @@ public class UsuAlteracaoActivity extends AppCompatActivity {
                     null,
                     etNmUsuario.getText().toString(),
                     etLogin.getText().toString(),
+                    etPassword.getText().toString(),
                     etEmail.getText().toString(),
                     cbFlgEditUsu.isChecked(),
                     cbFlgEditForn.isChecked(),
@@ -182,6 +185,7 @@ public class UsuAlteracaoActivity extends AppCompatActivity {
                     idUsuario,
                     etNmUsuario.getText().toString(),
                     etLogin.getText().toString(),
+                    null,
                     etEmail.getText().toString(),
                     cbFlgEditUsu.isChecked(),
                     cbFlgEditForn.isChecked(),

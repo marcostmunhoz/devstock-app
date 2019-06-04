@@ -9,6 +9,8 @@ public class Usuario extends BaseModel {
     public String nmUsuario;
     @Expose
     public String login;
+    @Expose (deserialize = false)
+    public String password;
     @Expose
     public String email;
     @Expose
@@ -20,10 +22,11 @@ public class Usuario extends BaseModel {
     @Expose
     protected Integer flgMov;
 
-    public Usuario(Integer idUsuario, String nmUsuario, String login, String email, boolean flgEditUsu, boolean flgEditForn, boolean flgEditProd, boolean flgMov) {
+    public Usuario(Integer idUsuario, String nmUsuario, String login, String password, String email, boolean flgEditUsu, boolean flgEditForn, boolean flgEditProd, boolean flgMov) {
         this.idUsuario = idUsuario;
         this.nmUsuario = nmUsuario;
         this.login = login;
+        this.password = password;
         this.email = email;
         this.flgEditUsu = (flgEditUsu ? 1 : 0);
         this.flgEditForn = (flgEditForn ? 1 : 0);
@@ -32,7 +35,7 @@ public class Usuario extends BaseModel {
     }
 
     public Usuario() {
-        this(null, null, null, null, false, false, false, false);
+        this(null, null, null, null, null, false, false, false, false);
     }
 
     public boolean getFlgEditUsu() {
