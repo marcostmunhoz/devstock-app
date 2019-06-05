@@ -293,4 +293,8 @@ public class ApiHandler {
             }
         });
     }
+
+    public void getMovimentacoes(String dtInicio, String dtFinal, Response.Listener success, Response.ErrorListener error) {
+
+    }
  }

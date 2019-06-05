@@ -30,7 +30,7 @@
         <activity android:name=".ProdutosActivity" />
         <activity android:name=".ProdAlteracaoActivity" />
         <activity android:name=".UsuariosActivity" />
-        <activity android:name=".MovCadastroActivity" />
+        <activity android:name=".MovimentacoesActivity" />
     </application>
 
 </manifest>

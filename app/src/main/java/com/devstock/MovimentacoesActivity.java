@@ -11,10 +11,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.devstock.adapters.FornecedorAdapter;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.devstock.adapters.MovimentacaoAdapter;
 import com.devstock.handlers.ApiHandler;
 import com.devstock.helpers.Helpers;
-import com.devstock.models.Fornecedor;
 import com.devstock.models.Movimentacao;
 
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class MovimentacoesActivity extends AppCompatActivity {
         btnCadastrar = findViewById(R.id.btnCadastrar);
         listView = findViewById(R.id.listView);
 
-        if (!ApiHandler.permiteEditarFornecedor()) {
+        if (!ApiHandler.permiteRealizarMovimentacao()) {
             btnCadastrar.setEnabled(false);
         }
 
@@ -61,7 +62,7 @@ public class MovimentacoesActivity extends AppCompatActivity {
         btnCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                abrirTelaMovimentacoes();
+                abrirTelaMovimentacoes(null);
             }
         });
 
@@ -71,7 +72,7 @@ public class MovimentacoesActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            limparCampo();
+            limparDatas();
         }
     }
 
@@ -118,12 +119,12 @@ public class MovimentacoesActivity extends AppCompatActivity {
     public void setListaMovs(String data) {
         Movimentacao[] movs = Helpers.deserialize(data, Movimentacao[].class);
         MovimentacaoAdapter listMovs = new MovimentacaoAdapter(new ArrayList<>(Arrays.asList(movs)), this);
-        listForns.setOnItemClickListener(new View.OnClickListener() {
+        listMovs.setOnItemClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int id = (Integer) v.getTag(R.id.item_id);
 
-                abrirTelaFornecedor(id);
+                abrirTelaMovimentacoes(id);
             }
         });
 
