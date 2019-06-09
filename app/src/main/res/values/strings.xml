@@ -13,4 +13,5 @@
     <!-- Ids das tags -->
     <item name="item_id" type="id" />
     <item name="item_index" type="id" />
+    <item name="item_razao_social" type="id" />
 </resources>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvRazao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Razão Social" />
+
+        <TextView
+            android:id="@+id/tvCnpj"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CNPJ" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnSelecionarFornecedor"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:focusable="false"
+        android:text="Selecionar" />
+
+</LinearLayout>

@@ -71,8 +71,8 @@ public class MovimentacoesActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            limparDatas();
+        if (requestCode == 4) {
+            realizarBusca();
         }
     }
 
@@ -136,6 +136,6 @@ public class MovimentacoesActivity extends AppCompatActivity {
         if (id != null) {
             intent.putExtra("id_movimentacao", id);
         }
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, 4);
     }
 }

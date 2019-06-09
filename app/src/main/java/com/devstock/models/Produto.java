@@ -22,7 +22,6 @@ public class Produto extends BaseModel {
         this.nmProduto = nmProduto;
         this.nrQtdEstocada = nrQtdEstocada;
         this.idFornecedor = idFornecedor;
-        this.fornecedor = fornecedor;
     }
 
     public Produto() {

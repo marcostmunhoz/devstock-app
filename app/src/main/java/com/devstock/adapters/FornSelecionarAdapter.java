@@ -8,26 +8,21 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.devstock.handlers.ApiHandler;
 import com.devstock.helpers.Helpers;
 import com.devstock.R;
 import com.devstock.models.Fornecedor;
 
 import java.util.ArrayList;
 
-public class FornecedorAdapter extends ArrayAdapter<Fornecedor> implements View.OnClickListener {
+public class FornSelecionarAdapter extends ArrayAdapter<Fornecedor> implements View.OnClickListener {
     private View.OnClickListener onItemClickListener;
     private View.OnClickListener onButtonClickListener;
 
     Context context;
 
-    public FornecedorAdapter(ArrayList<Fornecedor> data, Context context) {
-        super(context, R.layout.item_fornecedor, data);
+    public FornSelecionarAdapter(ArrayList<Fornecedor> data, Context context) {
+        super(context, R.layout.item_fornecedor_select, data);
         this.context = context;
-    }
-
-    public void setOnItemClickListener(View.OnClickListener listener) {
-        this.onItemClickListener = listener;
     }
 
     public void setOnButtonClickListener(View.OnClickListener listener) {
@@ -36,13 +31,9 @@ public class FornecedorAdapter extends ArrayAdapter<Fornecedor> implements View.
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btnExcluirFornecedor) {
+        if (v.getId() == R.id.btnSelecionarFornecedor) {
             if (this.onButtonClickListener != null) {
                 this.onButtonClickListener.onClick(v);
-            }
-        } else {
-            if (this.onItemClickListener != null) {
-                this.onItemClickListener.onClick(v);
             }
         }
     }
@@ -53,39 +44,30 @@ public class FornecedorAdapter extends ArrayAdapter<Fornecedor> implements View.
 
         if (v == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            v = inflater.inflate(R.layout.item_fornecedor, null);
+            v = inflater.inflate(R.layout.item_fornecedor_select, null);
         }
 
         Fornecedor f = getItem(position);
 
         if (f != null) {
             TextView tvRazao = v.findViewById(R.id.tvRazao),
-                    tvNomeFantasia = v.findViewById(R.id.tvNomeFantasia),
                     tvCnpj = v.findViewById(R.id.tvCnpj);
-            Button btnExcluirFornecedor = v.findViewById(R.id.btnExcluirFornecedor);
+            Button btnSelecionarFornecedor = v.findViewById(R.id.btnSelecionarFornecedor);
 
             if (tvRazao != null) {
                 tvRazao.setText(f.razaoSocial);
-            }
-
-            if (tvNomeFantasia != null) {
-                tvNomeFantasia.setText(f.nomeFantasia);
             }
 
             if (tvCnpj != null) {
                 tvCnpj.setText(Helpers.formatString("##.###.###/####-##", f.cnpjFornecedor));
             }
 
-            if (btnExcluirFornecedor != null) {
-                btnExcluirFornecedor.setOnClickListener(this);
-                btnExcluirFornecedor.setTag(R.id.item_id, f.idFornecedor);
-
-                if (!ApiHandler.permiteEditarFornecedor()) {
-                    btnExcluirFornecedor.setEnabled(false);
-                }
+            if (btnSelecionarFornecedor != null) {
+                btnSelecionarFornecedor.setOnClickListener(this);
+                btnSelecionarFornecedor.setTag(R.id.item_id, f.idFornecedor);
+                btnSelecionarFornecedor.setTag(R.id.item_razao_social, f.razaoSocial);
             }
 
-            v.setTag(R.id.item_id, f.idFornecedor);
             v.setOnClickListener(this);
         }
 

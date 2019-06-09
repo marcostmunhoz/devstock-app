@@ -71,8 +71,8 @@ public class UsuariosActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 3 && resultCode == Activity.RESULT_OK) {
-            limparCampo();
+        if (requestCode == 3) {
+            realizarBusca();
         }
     }
 

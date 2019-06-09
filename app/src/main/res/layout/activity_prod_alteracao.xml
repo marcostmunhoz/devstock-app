@@ -81,14 +81,29 @@
                     android:layout_height="wrap_content"
                     android:text="Fornecedor:" />
 
-                <Spinner
-                    android:id="@+id/spinForn"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Fornecedor"
-                    android:spinnerMode="dropdown"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="8dp" />
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/etForn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:hint="Selecione um fornecedor"
+                        android:inputType="text" />
+
+                    <Button
+                        android:id="@+id/btnSelecionar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.75"
+                        android:text="Selecionar" />
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/txtDtCad"

@@ -71,8 +71,8 @@ public class FornecedoresActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            limparCampo();
+        if (requestCode == 1) {
+            realizarBusca();
         }
     }
 

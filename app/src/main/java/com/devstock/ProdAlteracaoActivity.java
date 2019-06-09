@@ -10,26 +10,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.devstock.adapters.FornecedorAdapter;
 import com.devstock.handlers.ApiHandler;
 import com.devstock.helpers.Helpers;
-import com.devstock.models.Fornecedor;
 import com.devstock.models.Produto;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ProdAlteracaoActivity extends AppCompatActivity {
     ApiHandler apiHandler;
 
-    Button btnSalvar, btnVoltar;
-    EditText etCod, etDesc, etQtd, etDtCad, etDtEdit;
-    Spinner spinForn;
+    Button btnSalvar, btnVoltar, btnSelecionar;
+    EditText etCod, etDesc, etQtd, etForn, etDtCad, etDtEdit;
     Integer idProduto = null,
         idForn = null;
 
@@ -44,12 +39,13 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
         apiHandler = ApiHandler.getInstance(this);
         btnSalvar = findViewById(R.id.btnSalvar);
         btnVoltar = findViewById(R.id.btnVoltar);
+        btnSelecionar = findViewById(R.id.btnSelecionar);
         etCod = findViewById(R.id.etCod);
         etDesc = findViewById(R.id.etDesc);
         etQtd = findViewById(R.id.etQtd);
+        etForn = findViewById(R.id.etForn);
         etDtCad = findViewById(R.id.etDtCad);
         etDtEdit = findViewById(R.id.etDtEdit);
-        spinForn = findViewById(R.id.spinForn);
 
         if (!ApiHandler.permiteEditarProduto()) {
             btnSalvar.setEnabled(false);
@@ -74,6 +70,13 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
             }
         });
 
+        btnSelecionar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                abrirSelectFornecedor();
+            }
+        });
+
         Intent intent = getIntent();
         if (intent != null) {
             Bundle bundle = intent.getExtras();
@@ -84,8 +87,6 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
                 getProduto();
             }
         }
-
-        getFornecedores();
     }
 
     @Override
@@ -100,41 +101,20 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
         return true;
     }
 
-    public void getFornecedores() {
-        spinForn.setAdapter(null);
-
-        final ProgressDialog dialog = Helpers.showLoading(this, "Carregando lista de fornecedores...");
-
-        apiHandler.getFornecedores(new Response.Listener() {
-            @Override
-            public void onResponse(Object response) {
-                try {
-                    carregaFornecedores(response.toString());
-                } catch (Exception ex) {
-                    Toast.makeText(ProdAlteracaoActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
-                } finally {
-                    dialog.cancel();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 5) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (data.hasExtra("id_forn") && data.hasExtra("razao_social_forn")) {
+                    idForn = data.getIntExtra("id_forn", 0);
+                    etForn.setText(data.getStringExtra("razao_social_forn"));
+                    return;
                 }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                try {
-                    Helpers.tratarRetorno(ProdAlteracaoActivity.this, error, true);
-                } catch (Exception ex) {
-                    Toast.makeText(ProdAlteracaoActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
-                } finally {
-                    dialog.cancel();
-                }
-            }
-        });
-    }
 
-    public void carregaFornecedores(String data) {
-        Fornecedor[] fornecedores = Helpers.deserialize(data, Fornecedor[].class);
-        FornecedorAdapter adapter = new FornecedorAdapter(new ArrayList<>(Arrays.asList(fornecedores)), this);
-        adapter.setSimple(true);
-        spinForn.setAdapter(adapter);
+            idForn = null;
+            etForn.setText("");
+        }
     }
 
     public void getProduto() {
@@ -174,6 +154,11 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
             etQtd.setText(String.valueOf(p.nrQtdEstocada));
             etDtCad.setText(p.getDtCadastro());
             etDtEdit.setText(p.getDtEdicao());
+
+            if (p.idFornecedor != null && p.fornecedor != null) {
+                idForn = p.idFornecedor;
+                etForn.setText(p.fornecedor.razaoSocial);
+            }
         } else {
             throw new Exception("Produto não encontrado.");
         }
@@ -276,5 +261,10 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
         } else {
             return new Produto(idProduto, cod, desc, qtd, idForn);
         }
+    }
+
+    public void abrirSelectFornecedor() {
+        Intent intent = new Intent(this, FornSelecionarActivity.class);
+        startActivityForResult(intent, 5);
     }
 }
