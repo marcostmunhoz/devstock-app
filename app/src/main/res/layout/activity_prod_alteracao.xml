@@ -41,6 +41,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
+                    android:maxLength="15"
                     android:hint="Código"
                     android:inputType="textPersonName" />
 
@@ -55,6 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
+                    android:maxLength="50"
                     android:hint="Descrição"
                     android:inputType="textPersonName" />
 
@@ -87,14 +89,6 @@
                     android:spinnerMode="dropdown"
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp" />
-
-                <!--<EditText
-                    android:id="@+id/etForn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Fornecedor"
-                    android:inputType="textPersonName" />-->
 
                 <TextView
                     android:id="@+id/txtDtCad"

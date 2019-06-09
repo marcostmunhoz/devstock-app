@@ -5,9 +5,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -30,7 +30,8 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
     Button btnSalvar, btnVoltar;
     EditText etCod, etDesc, etQtd, etDtCad, etDtEdit;
     Spinner spinForn;
-    Integer idProduto = null;
+    Integer idProduto = null,
+        idForn = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,31 +58,19 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            if (ProdAlteracaoActivity.this.idProduto != null) {
-                editarProduto();
-            } else {
-                cadastrarProduto();
-            }
+                if (ProdAlteracaoActivity.this.idProduto != null) {
+                    editarProduto();
+                } else {
+                    cadastrarProduto();
+                }
             }
         });
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            setResult(Activity.RESULT_OK);
-            finish();
-            }
-        });
-
-        spinForn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+                setResult(Activity.RESULT_OK);
+                finish();
             }
         });
 
@@ -92,7 +81,7 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
             if (bundle != null && bundle.containsKey("id_produto")) {
                 idProduto = bundle.getInt("id_produto");
 
-                getProduto(idProduto);
+                getProduto();
             }
         }
 
@@ -131,8 +120,7 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 try {
-                    String content = new String(error.networkResponse.data, "UTF-8");
-                    Toast.makeText(ProdAlteracaoActivity.this, content, Toast.LENGTH_LONG).show();
+                    Helpers.tratarRetorno(ProdAlteracaoActivity.this, error, true);
                 } catch (Exception ex) {
                     Toast.makeText(ProdAlteracaoActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                 } finally {
@@ -149,33 +137,32 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
         spinForn.setAdapter(adapter);
     }
 
-    public void getProduto(int id) {
+    public void getProduto() {
         final ProgressDialog dialog = Helpers.showLoading(this, "Carregando informações do produto...");
 
         apiHandler.getProduto(idProduto, new Response.Listener() {
             @Override
             public void onResponse(Object response) {
-            try {
-                Produto p = Helpers.deserialize(response.toString(), Produto.class);
+                try {
+                    Produto p = Helpers.deserialize(response.toString(), Produto.class);
 
-                carregarInfosProduto(p);
-            } catch (Exception ex) {
-                Toast.makeText(ProdAlteracaoActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
-            } finally {
-                dialog.cancel();
-            }
+                    carregarInfosProduto(p);
+                } catch (Exception ex) {
+                    Toast.makeText(ProdAlteracaoActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                } finally {
+                    dialog.cancel();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-            try {
-                String content = new String(error.networkResponse.data, "UTF-8");
-                Toast.makeText(ProdAlteracaoActivity.this, content, Toast.LENGTH_LONG).show();
-            } catch (Exception ex) {
-                Toast.makeText(ProdAlteracaoActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
-            } finally {
-                dialog.cancel();
-            }
+                try {
+                    Helpers.tratarRetorno(ProdAlteracaoActivity.this, error, true);
+                } catch (Exception ex) {
+                    Toast.makeText(ProdAlteracaoActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                } finally {
+                    dialog.cancel();
+                }
             }
         });
     }
@@ -194,23 +181,15 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
 
     public void cadastrarProduto() {
         try {
+            Produto p = getInstanceProduto();
             final ProgressDialog dialog = Helpers.showLoading(this, "Realizando cadastro...");
-            Produto p = new Produto(
-                    null,
-                    etCod.getText().toString(),
-                    etDesc.getText().toString(),
-                    Integer.parseInt(etQtd.getText().toString()),
-                    null,
-                    null
-            );
 
             apiHandler.newProduto(p, new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
-                    dialog.cancel();
-                    Toast.makeText(ProdAlteracaoActivity.this, "Produto cadastrado com sucesso.", Toast.LENGTH_LONG).show();
-
                     try {
+                        dialog.cancel();
+                        Helpers.tratarRetorno(ProdAlteracaoActivity.this, response, false);
                         Produto p = Helpers.deserialize(response.toString(), Produto.class);
 
                         idProduto = p.idProduto;
@@ -224,8 +203,7 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     try {
-                        String content = new String(error.networkResponse.data, "UTF-8");
-                        Toast.makeText(ProdAlteracaoActivity.this, content, Toast.LENGTH_LONG).show();
+                        Helpers.tratarRetorno(ProdAlteracaoActivity.this, error, true);
                     } catch (Exception ex) {
                         Toast.makeText(ProdAlteracaoActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                     } finally {
@@ -240,23 +218,15 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
 
     public void editarProduto() {
         try {
+            Produto p = getInstanceProduto();
             final ProgressDialog dialog = Helpers.showLoading(this, "Salvando alterações...");
-            Produto p = new Produto(
-                    idProduto,
-                    etCod.getText().toString(),
-                    etDesc.getText().toString(),
-                    Integer.parseInt(etQtd.getText().toString()),
-                    null,
-                    null
-            );
 
             apiHandler.setProduto(p, new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
-                    dialog.cancel();
-                    Toast.makeText(ProdAlteracaoActivity.this, "Produto editado com sucesso.", Toast.LENGTH_LONG).show();
-
                     try {
+                        dialog.cancel();
+                        Helpers.tratarRetorno(ProdAlteracaoActivity.this, response, false);
                         Produto p = Helpers.deserialize(response.toString(), Produto.class);
 
                         carregarInfosProduto(p);
@@ -268,8 +238,7 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     try {
-                        String content = new String(error.networkResponse.data, "UTF-8");
-                        Toast.makeText(ProdAlteracaoActivity.this, content, Toast.LENGTH_LONG).show();
+                        Helpers.tratarRetorno(ProdAlteracaoActivity.this, error, true);
                     } catch (Exception ex) {
                         Toast.makeText(ProdAlteracaoActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                     } finally {
@@ -279,6 +248,33 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
             });
         } catch (Exception ex) {
             Toast.makeText(ProdAlteracaoActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public Produto getInstanceProduto() throws Exception {
+        String cod = etCod.getText().toString(),
+                desc = etDesc.getText().toString(),
+                qtdString = etQtd.getText().toString();
+        Integer qtd = (qtdString.length() > 0 ? Integer.parseInt(qtdString) : 0);
+
+        ArrayList<String> errors = new ArrayList<>();
+
+        if (cod.length() == 0) {
+            errors.add("O código é obrigatório.");
+        }
+
+        if (desc.length() == 0) {
+            errors.add("A descrição é obrigatória.");
+        }
+
+        if (idForn == null) {
+            errors.add("O fornecedor é obrigatório.");
+        }
+
+        if (errors.size() > 0) {
+            throw new Exception(TextUtils.join("\n", errors));
+        } else {
+            return new Produto(idProduto, cod, desc, qtd, idForn);
         }
     }
 }

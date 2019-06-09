@@ -43,6 +43,11 @@ public class LoginActivity extends AppCompatActivity {
                 String login = etLogin.getText().toString(),
                         senha = etSenha.getText().toString();
 
+                if (login == "" || senha == "") {
+                    Toast.makeText(LoginActivity.this, "Por favor, insira o login e a senha.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 final ProgressDialog dialog = Helpers.showLoading(LoginActivity.this, "Realizando login...");
 
                 try {

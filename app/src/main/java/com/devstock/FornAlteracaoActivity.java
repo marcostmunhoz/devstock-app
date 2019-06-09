@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +17,9 @@ import com.android.volley.VolleyError;
 import com.devstock.handlers.ApiHandler;
 import com.devstock.helpers.Helpers;
 import com.devstock.models.Fornecedor;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class FornAlteracaoActivity extends AppCompatActivity {
     ApiHandler apiHandler;
@@ -71,12 +76,12 @@ public class FornAlteracaoActivity extends AppCompatActivity {
             if (bundle != null && bundle.containsKey("id_fornecedor")) {
                 idForn = bundle.getInt("id_fornecedor");
 
-                getFornecedor(idForn);
+                getFornecedor();
             }
         }
     }
 
-    public void getFornecedor(int id) {
+    public void getFornecedor() {
         final ProgressDialog dialog = Helpers.showLoading(this, "Carregando informações do fornecedor...");
 
         apiHandler.getFornecedor(idForn, new Response.Listener() {
@@ -96,8 +101,7 @@ public class FornAlteracaoActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 try {
-                    String content = new String(error.networkResponse.data, "UTF-8");
-                    Toast.makeText(FornAlteracaoActivity.this, content, Toast.LENGTH_LONG).show();
+                    Helpers.tratarRetorno(FornAlteracaoActivity.this, error, true);
                 } catch (Exception ex) {
                     Toast.makeText(FornAlteracaoActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                 } finally {
@@ -124,24 +128,15 @@ public class FornAlteracaoActivity extends AppCompatActivity {
 
     public void cadastrarForn() {
         try {
+            Fornecedor f = getInstanceFornecedor();
             final ProgressDialog dialog = Helpers.showLoading(this, "Realizando cadastro...");
-            Fornecedor f = new Fornecedor(
-                    null,
-                    etRazao.getText().toString(),
-                    etNomeFantasia.getText().toString(),
-                    etCnpj.getText().toString(),
-                    etEnd.getText().toString(),
-                    etFone.getText().toString(),
-                    etEmail.getText().toString()
-            );
 
             apiHandler.newFornecedor(f, new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
-                    dialog.cancel();
-                    Toast.makeText(FornAlteracaoActivity.this, "Fornecedor cadastrado com sucesso.", Toast.LENGTH_LONG).show();
-
                     try {
+                        dialog.cancel();
+                        Helpers.tratarRetorno(FornAlteracaoActivity.this, response, false);
                         Fornecedor f = Helpers.deserialize(response.toString(), Fornecedor.class);
 
                         idForn = f.idFornecedor;
@@ -155,8 +150,7 @@ public class FornAlteracaoActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     try {
-                        String content = new String(error.networkResponse.data, "UTF-8");
-                        Toast.makeText(FornAlteracaoActivity.this, content, Toast.LENGTH_LONG).show();
+                        Helpers.tratarRetorno(FornAlteracaoActivity.this, error, true);
                     } catch (Exception ex) {
                         Toast.makeText(FornAlteracaoActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                     } finally {
@@ -171,24 +165,15 @@ public class FornAlteracaoActivity extends AppCompatActivity {
 
     public void editarForn() {
         try {
+            Fornecedor f = getInstanceFornecedor();
             final ProgressDialog dialog = Helpers.showLoading(this, "Salvando alterações...");
-            Fornecedor f = new Fornecedor(
-                    idForn,
-                    etRazao.getText().toString(),
-                    etNomeFantasia.getText().toString(),
-                    etCnpj.getText().toString(),
-                    etEnd.getText().toString(),
-                    etFone.getText().toString(),
-                    etEmail.getText().toString()
-            );
 
             apiHandler.setFornecedor(f, new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
-                    dialog.cancel();
-                    Toast.makeText(FornAlteracaoActivity.this, "Fornecedor editado com sucesso.", Toast.LENGTH_LONG).show();
-
                     try {
+                        dialog.cancel();
+                        Helpers.tratarRetorno(FornAlteracaoActivity.this, response, false);
                         Fornecedor f = Helpers.deserialize(response.toString(), Fornecedor.class);
 
                         carregarInfosForn(f);
@@ -200,8 +185,7 @@ public class FornAlteracaoActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     try {
-                        String content = new String(error.networkResponse.data, "UTF-8");
-                        Toast.makeText(FornAlteracaoActivity.this, content, Toast.LENGTH_LONG).show();
+                        Helpers.tratarRetorno(FornAlteracaoActivity.this, error, true);
                     } catch (Exception ex) {
                         Toast.makeText(FornAlteracaoActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                     } finally {
@@ -211,6 +195,47 @@ public class FornAlteracaoActivity extends AppCompatActivity {
             });
         } catch (Exception ex) {
             Toast.makeText(FornAlteracaoActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public Fornecedor getInstanceFornecedor() throws Exception {
+        String razao = etRazao.getText().toString(),
+                nomeFantasia = etNomeFantasia.getText().toString(),
+                cnpj = etCnpj.getText().toString(),
+                endereco = etEnd.getText().toString(),
+                fone = etFone.getText().toString(),
+                email = etEmail.getText().toString();
+
+        ArrayList<String> errors = new ArrayList<>();
+
+        if (razao.length() == 0) {
+            errors.add("A razão social é obrigatória.");
+        }
+
+        if (nomeFantasia.length() == 0) {
+            errors.add("O nome fantasia é obrigatório.");
+        }
+
+        if (cnpj.length() < 14) {
+            errors.add("O CNPJ deve possuir 14 caracteres.");
+        }
+
+        if (endereco.length() == 0) {
+            errors.add("O endereço é obrigatório.");
+        }
+
+        if (fone.length() != 10 && fone.length() != 11) {
+            errors.add("O telefone deve possuir 10 ou 11 dígitos (DDD + número).");
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            errors.add("Um e-mail válido é obrigatório.");
+        }
+
+        if (errors.size() > 0) {
+            throw new Exception(TextUtils.join("\n", errors));
+        } else {
+            return new Fornecedor(idForn, razao, nomeFantasia, cnpj, endereco, fone, email);
         }
     }
 }

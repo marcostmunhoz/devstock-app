@@ -2,6 +2,7 @@ package com.devstock;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -80,7 +81,8 @@ public class ProdutosActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MenuActivity.class));  //O efeito ao ser pressionado do botão (no caso abre a activity)
                 finishAffinity();  //Método para matar a activity e não deixa-lá indexada na pilhagem
                 break;
-            default:break;
+            default:
+                break;
         }
         return true;
     }
@@ -112,8 +114,7 @@ public class ProdutosActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     try {
-                        String content = new String(error.networkResponse.data, "UTF-8");
-                        Toast.makeText(ProdutosActivity.this, content, Toast.LENGTH_LONG).show();
+                        Helpers.tratarRetorno(ProdutosActivity.this, error, true);
                     } catch (Exception ex) {
                         Toast.makeText(ProdutosActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                     } finally {
@@ -145,9 +146,14 @@ public class ProdutosActivity extends AppCompatActivity {
         listProdutos.setOnButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int id = (Integer) v.getTag(R.id.item_id);
+                final int id = (Integer) v.getTag(R.id.item_id);
 
-                deleteProduto(id);
+                Helpers.confirmDialog(ProdutosActivity.this, "Excluir", "Deseja realmente excluir o produto?", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteProduto(id);
+                    }
+                });
             }
         });
 
@@ -158,15 +164,18 @@ public class ProdutosActivity extends AppCompatActivity {
         apiHandler.deleteProduto(id, new Response.Listener() {
             @Override
             public void onResponse(Object response) {
-                Toast.makeText(ProdutosActivity.this, "Produto excluído com sucesso", Toast.LENGTH_LONG).show();
-                realizarBusca();
+                try {
+                    Helpers.tratarRetorno(ProdutosActivity.this, response, false);
+                    realizarBusca();
+                } catch (Exception ex) {
+                    Toast.makeText(ProdutosActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 try {
-                    String content = new String(error.networkResponse.data, "UTF-8");
-                    Toast.makeText(ProdutosActivity.this, content, Toast.LENGTH_LONG).show();
+                    Helpers.tratarRetorno(ProdutosActivity.this, error, false);
                 } catch (Exception ex) {
                     Toast.makeText(ProdutosActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                 }

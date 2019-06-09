@@ -16,7 +16,7 @@ public class Produto extends BaseModel {
     @Expose (serialize = false)
     public Fornecedor fornecedor;
 
-    public Produto(Integer idProduto, String codProduto, String nmProduto, Integer nrQtdEstocada, Integer idFornecedor, Fornecedor fornecedor) {
+    public Produto(Integer idProduto, String codProduto, String nmProduto, Integer nrQtdEstocada, Integer idFornecedor) {
         this.idProduto = idProduto;
         this.codProduto = codProduto;
         this.nmProduto = nmProduto;
@@ -26,6 +26,6 @@ public class Produto extends BaseModel {
     }
 
     public Produto() {
-        this(null, null, null, null, null, null);
+        this(null, null, null, null, null);
     }
 }

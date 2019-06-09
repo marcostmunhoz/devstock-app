@@ -2,6 +2,7 @@ package com.devstock;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -95,8 +96,7 @@ public class FornecedoresActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     try {
-                        String content = new String(error.networkResponse.data, "UTF-8");
-                        Toast.makeText(FornecedoresActivity.this, content, Toast.LENGTH_LONG).show();
+                        Helpers.tratarRetorno(FornecedoresActivity.this, error, true);
                     } catch (Exception ex) {
                         Toast.makeText(FornecedoresActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                     } finally {
@@ -128,9 +128,14 @@ public class FornecedoresActivity extends AppCompatActivity {
         listForns.setOnButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int id = (Integer) v.getTag(R.id.item_id);
+                final int id = (Integer) v.getTag(R.id.item_id);
 
-                deleteFornecedor(id);
+                Helpers.confirmDialog(FornecedoresActivity.this, "Excluir", "Deseja realmente excluir o fornecedor?", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteFornecedor(id);
+                    }
+                });
             }
         });
 
@@ -141,15 +146,18 @@ public class FornecedoresActivity extends AppCompatActivity {
         apiHandler.deleteFornecedor(id, new Response.Listener() {
             @Override
             public void onResponse(Object response) {
-                Toast.makeText(FornecedoresActivity.this, "Fornecedor excluído com sucesso", Toast.LENGTH_LONG).show();
-                realizarBusca();
+                try {
+                    Helpers.tratarRetorno(FornecedoresActivity.this, response, false);
+                    realizarBusca();
+                } catch (Exception ex) {
+                    Toast.makeText(FornecedoresActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 try {
-                    String content = new String(error.networkResponse.data, "UTF-8");
-                    Toast.makeText(FornecedoresActivity.this, content, Toast.LENGTH_LONG).show();
+                    Helpers.tratarRetorno(FornecedoresActivity.this, error, true);
                 } catch (Exception ex) {
                     Toast.makeText(FornecedoresActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                 }

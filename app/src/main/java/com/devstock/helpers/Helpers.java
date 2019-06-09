@@ -1,9 +1,12 @@
 package com.devstock.helpers;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -200,5 +203,35 @@ public class Helpers {
         } catch (Exception ex) {
             return value;
         }
+    }
+
+    public static void confirmDialog(Context ctx, String title, String text, DialogInterface.OnClickListener okButton) {
+        new AlertDialog.Builder(ctx)
+                .setTitle(title)
+                .setMessage(text)
+                .setPositiveButton("Sim", okButton)
+                .setNegativeButton("Não", null)
+                .show();
+    }
+
+    public static void tratarRetorno(Context ctx, Object data, boolean erro) throws Exception {
+        String jsonString;
+
+        if (!erro) {
+            jsonString = data.toString();
+        } else {
+            jsonString = new String(((VolleyError)data).networkResponse.data, "UTF-8");
+        }
+
+        JSONObject obj = new JSONObject(jsonString);
+        Toast t;
+
+        if (obj.has("message")) {
+            t = Toast.makeText(ctx, obj.getString("message"), Toast.LENGTH_LONG);
+        } else {
+            t = Toast.makeText(ctx, jsonString, Toast.LENGTH_LONG);
+        }
+
+        t.show();
     }
 }

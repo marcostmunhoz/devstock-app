@@ -1,5 +1,6 @@
 package com.devstock;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -54,12 +55,17 @@ public class MenuActivity extends AppCompatActivity {
         btnSair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ApiHandler.isLoggedIn()) {
-                    ApiHandler.setToken(null);
-                    ApiHandler.setUser(null);
-                    Helpers.removePrefs(MenuActivity.this, "AUTH_TOKEN");
-                    startActivity(5);
-                }
+                Helpers.confirmDialog(MenuActivity.this, "Logout", "Deseja realmente sair do sistema?", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (ApiHandler.isLoggedIn()) {
+                            ApiHandler.setToken(null);
+                            ApiHandler.setUser(null);
+                            Helpers.removePrefs(MenuActivity.this, "AUTH_TOKEN");
+                            startActivity(5);
+                        }
+                    }
+                });
             }
         });
     }

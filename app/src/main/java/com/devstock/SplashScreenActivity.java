@@ -43,7 +43,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(SplashScreenActivity.this, "Sessão expirada.\nPor favor, realize o login novamente.", Toast.LENGTH_LONG).show();;
+                        Toast.makeText(SplashScreenActivity.this, "Sessão expirada.\nPor favor, realize o login novamente.", Toast.LENGTH_LONG).show();
                         openLogin();
                     }
                 });

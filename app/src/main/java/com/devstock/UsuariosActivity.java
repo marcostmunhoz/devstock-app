@@ -2,6 +2,7 @@ package com.devstock;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -95,8 +96,7 @@ public class UsuariosActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     try {
-                        String content = new String(error.networkResponse.data, "UTF-8");
-                        Toast.makeText(UsuariosActivity.this, content, Toast.LENGTH_LONG).show();
+                        Helpers.tratarRetorno(UsuariosActivity.this, error, true);
                     } catch (Exception ex) {
                         Toast.makeText(UsuariosActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                     } finally {
@@ -128,17 +128,27 @@ public class UsuariosActivity extends AppCompatActivity {
         listUsus.setOnDeleteButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int id = (Integer) v.getTag(R.id.item_id);
+                final int id = (Integer) v.getTag(R.id.item_id);
 
-                deleteUsuario(id);
+                Helpers.confirmDialog(UsuariosActivity.this, "Excluir", "Deseja realmente excluir o usuário?", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteUsuario(id);
+                    }
+                });
             }
         });
         listUsus.setOnResetPasswordButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int id = (Integer) v.getTag(R.id.item_id);
+                final int id = (Integer) v.getTag(R.id.item_id);
 
-                resetSenhaUsuario(id);
+                Helpers.confirmDialog(UsuariosActivity.this, "Resetar senha", "Deseja realmente resetar a senha do usuário?", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        resetSenhaUsuario(id);
+                    }
+                });
             }
         });
 
@@ -149,15 +159,18 @@ public class UsuariosActivity extends AppCompatActivity {
         apiHandler.deleteUsuario(id, new Response.Listener() {
             @Override
             public void onResponse(Object response) {
-                Toast.makeText(UsuariosActivity.this, "Usuário excluído com sucesso", Toast.LENGTH_LONG).show();
-                realizarBusca();
+                try {
+                    Helpers.tratarRetorno(UsuariosActivity.this, response, false);
+                    realizarBusca();
+                } catch (Exception ex) {
+                    Toast.makeText(UsuariosActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 try {
-                    String content = new String(error.networkResponse.data, "UTF-8");
-                    Toast.makeText(UsuariosActivity.this, content, Toast.LENGTH_LONG).show();
+                    Helpers.tratarRetorno(UsuariosActivity.this, error, true);
                 } catch (Exception ex) {
                     Toast.makeText(UsuariosActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                 }
@@ -169,14 +182,17 @@ public class UsuariosActivity extends AppCompatActivity {
         apiHandler.resetSenhaUsuario(id, new Response.Listener() {
             @Override
             public void onResponse(Object response) {
-                Toast.makeText(UsuariosActivity.this, "Senha resetada com sucesso", Toast.LENGTH_LONG).show();
+                try {
+                    Helpers.tratarRetorno(UsuariosActivity.this, response, false);
+                } catch (Exception ex) {
+                    Toast.makeText(UsuariosActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 try {
-                    String content = new String(error.networkResponse.data, "UTF-8");
-                    Toast.makeText(UsuariosActivity.this, content, Toast.LENGTH_LONG).show();
+                    Helpers.tratarRetorno(UsuariosActivity.this, error, true);
                 } catch (Exception ex) {
                     Toast.makeText(UsuariosActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                 }

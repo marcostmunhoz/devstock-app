@@ -29,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:maxLength="50"
             android:hint="Nome do usuário:"
             android:inputType="textPersonName" />
 
@@ -43,6 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:maxLength="20"
             android:hint="Login"
             android:inputType="textPersonName" />
 
@@ -71,6 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:maxLength="191"
             android:hint="E-mail"
             android:inputType="textPersonName" />
 
