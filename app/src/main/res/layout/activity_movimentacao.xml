@@ -6,94 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".MovimentacoesActivity">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        android:orientation="vertical">
 
-        <android.support.constraint.ConstraintLayout
+        <Button
+            android:id="@+id/btnCadastrar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:text="Cadastrar" />
 
-            <LinearLayout
-                android:id="@+id/linearLayout5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_margin="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp" />
 
-                <EditText
-                    android:id="@+id/etDtInicio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="Data Inicio"
-                    android:inputType="date" />
-
-                <EditText
-                    android:id="@+id/etDtFim"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="Data Final"
-                    android:inputType="date" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linearLayout6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
-
-                <Button
-                    android:id="@+id/btnLimpar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Limpar" />
-
-                <Button
-                    android:id="@+id/btnConsultar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Consultar" />
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/btnCadastrar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Cadastrar"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
-
-            <ListView
-                android:id="@+id/listView"
-                android:layout_width="395dp"
-                android:layout_height="528dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btnCadastrar" />
-
-        </android.support.constraint.ConstraintLayout>
-    </ScrollView>
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

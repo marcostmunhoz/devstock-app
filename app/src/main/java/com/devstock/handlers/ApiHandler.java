@@ -11,6 +11,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.devstock.helpers.Helpers;
 import com.devstock.models.Fornecedor;
+import com.devstock.models.Movimentacao;
 import com.devstock.models.Produto;
 import com.devstock.models.Usuario;
 
@@ -294,7 +295,32 @@ public class ApiHandler {
         });
     }
 
-    public void getMovimentacoes(String dtInicio, String dtFinal, Response.Listener success, Response.ErrorListener error) {
+    public void getMovimentacoes(Response.Listener success, Response.ErrorListener error) {
+        this.queue.add(new JsonObjectRequest(Request.Method.GET, BASE_PATH + "/estoque/movimentacoes", null, success, error) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return ApiHandler.getHeaders();
+            }
+        });
+    }
 
+    public void getMovimentacao(int idMov, Response.Listener success, Response.ErrorListener error) {
+        this.queue.add(new JsonObjectRequest(Request.Method.GET, BASE_PATH + "/estoque/movimentacao/" + idMov, null, success, error) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return ApiHandler.getHeaders();
+            }
+        });
+    }
+
+    public void newMovimentacao(Movimentacao mov, Response.Listener success, Response.ErrorListener error) throws Exception {
+        JSONObject dados = Helpers.serialize(mov, Movimentacao.class);
+
+        this.queue.add(new JsonObjectRequest(Request.Method.POST, BASE_PATH + "/estoque/realizar-movimentacao", dados, success, error) {
+            @Override
+            public Map<String, String> getHeaders() {
+                return ApiHandler.getHeaders();
+            }
+        });
     }
  }

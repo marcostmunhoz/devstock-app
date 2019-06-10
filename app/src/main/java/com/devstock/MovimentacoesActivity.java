@@ -1,13 +1,11 @@
 package com.devstock;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -23,8 +21,7 @@ import java.util.Arrays;
 
 public class MovimentacoesActivity extends AppCompatActivity {
     ApiHandler apiHandler;
-    EditText etDtInicio, etDtFim;
-    Button btnConsultar, btnLimpar, btnCadastrar;
+    Button btnCadastrar;
     ListView listView;
 
     @Override
@@ -34,30 +31,12 @@ public class MovimentacoesActivity extends AppCompatActivity {
 
         apiHandler = ApiHandler.getInstance(this);
 
-        etDtInicio = findViewById(R.id.etDtInicio);
-        etDtFim = findViewById(R.id.etDtFim);
-        btnConsultar = findViewById(R.id.btnConsultar);
-        btnLimpar = findViewById(R.id.btnLimpar);
         btnCadastrar = findViewById(R.id.btnCadastrar);
         listView = findViewById(R.id.listView);
 
         if (!ApiHandler.permiteRealizarMovimentacao()) {
             btnCadastrar.setEnabled(false);
         }
-
-        btnConsultar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                realizarBusca();
-            }
-        });
-
-        btnLimpar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                limparDatas();
-            }
-        });
 
         btnCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +60,7 @@ public class MovimentacoesActivity extends AppCompatActivity {
         try {
             final ProgressDialog dialog = Helpers.showLoading(this, "Buscando movimentações...");
 
-            apiHandler.getMovimentacoes(etDtInicio.getText().toString(), etDtFim.getText().toString(), new Response.Listener() {
+            apiHandler.getMovimentacoes(new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
                     try {
@@ -96,8 +75,7 @@ public class MovimentacoesActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     try {
-                        String content = new String(error.networkResponse.data, "UTF-8");
-                        Toast.makeText(MovimentacoesActivity.this, content, Toast.LENGTH_LONG).show();
+                        Helpers.tratarRetorno(MovimentacoesActivity.this, error, true);
                     } catch (Exception ex) {
                         Toast.makeText(MovimentacoesActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                     } finally {
@@ -108,12 +86,6 @@ public class MovimentacoesActivity extends AppCompatActivity {
         } catch (Exception ex) {
             Toast.makeText(MovimentacoesActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
         }
-    }
-
-    public void limparDatas() {
-        etDtInicio.setText("");
-        etDtFim.setText("");
-        realizarBusca();
     }
 
     public void setListaMovs(String data) {
@@ -132,7 +104,7 @@ public class MovimentacoesActivity extends AppCompatActivity {
     }
 
     public void abrirTelaMovimentacoes(Integer id) {
-        Intent intent = new Intent(this, FornAlteracaoActivity.class);
+        Intent intent = new Intent(this, MovCadastroActivity.class);
         if (id != null) {
             intent.putExtra("id_movimentacao", id);
         }

@@ -14,4 +14,5 @@
     <item name="item_id" type="id" />
     <item name="item_index" type="id" />
     <item name="item_razao_social" type="id" />
+    <item name="item_produto" type="id" />
 </resources>

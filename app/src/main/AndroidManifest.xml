@@ -14,7 +14,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UsuAlteracaoActivity" />
         <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,6 +31,9 @@
         <activity android:name=".ProdAlteracaoActivity" />
         <activity android:name=".UsuariosActivity" />
         <activity android:name=".MovimentacoesActivity" />
+        <activity android:name=".ProdSelecionarActivity" />
+        <activity android:name=".UsuAlteracaoActivity" />
+        <activity android:name=".MovCadastroActivity" />
     </application>
 
 </manifest>

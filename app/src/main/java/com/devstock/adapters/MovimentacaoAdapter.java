@@ -49,9 +49,9 @@ public class MovimentacaoAdapter extends ArrayAdapter<Movimentacao> implements V
         Movimentacao m = getItem(position);
 
         try {
-            dtHr = m.getDthrMovimentacao();
+            dtHr = m.getDtCadastro();
         } catch (Exception ex) {
-            dtHr = m.dthrMovimentacao;
+            dtHr = "-";
         }
 
         if (m != null) {
@@ -64,7 +64,7 @@ public class MovimentacaoAdapter extends ArrayAdapter<Movimentacao> implements V
             }
 
             if (tvTpMovimentacao != null) {
-                tvTpMovimentacao.setText(m.tpMovimentacao == 1 ? "SAÍDA" : "ENTRADA");
+                tvTpMovimentacao.setText(m.tpMovimentacao == 2 ? "SAÍDA" : "ENTRADA");
             }
 
             if (tvDsMovimentacao != null) {

@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -233,5 +234,13 @@ public class Helpers {
         }
 
         t.show();
+    }
+
+    public static String getDate(DatePicker dp) {
+        return dp.getYear() +
+                "-" +
+                (dp.getMonth() + 1) +
+                "-" +
+                dp.getDayOfMonth();
     }
 }
