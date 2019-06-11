@@ -56,7 +56,7 @@ public class ProdutoMovimentacaoAdapter extends ArrayAdapter<ProdutoMovimentacao
             }
 
             if (tvQtd != null) {
-                tvQtd.setText("Qtd: " + p.nrQtdMovimentacao.toString());
+                tvQtd.setText("Qtd: " + p.nrQtdMovimentada.toString());
             }
 
             if (tvVlrUnitario != null) {

@@ -10,14 +10,14 @@ public class ProdutoMovimentacao extends BaseModel {
     @Expose
     public Integer idMovimentacao;
     @Expose
-    public Integer nrQtdMovimentacao;
+    public Integer nrQtdMovimentada;
     @Expose
     public Float vlrUnitario;
     @Expose (serialize = false)
     public Produto produto;
 
-    public ProdutoMovimentacao(Integer nrQtdMovimentacao, Float vlrUnitario, Produto produto) {
-        this.nrQtdMovimentacao = nrQtdMovimentacao;
+    public ProdutoMovimentacao(Integer nrQtdMovimentada, Float vlrUnitario, Produto produto) {
+        this.nrQtdMovimentada = nrQtdMovimentada;
         this.vlrUnitario = vlrUnitario;
         this.produto = produto;
         if (this.produto != null) {

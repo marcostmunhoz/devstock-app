@@ -57,7 +57,6 @@ public class MovCadastroActivity extends AppCompatActivity {
         etQtd = findViewById(R.id.etQtd);
         etVlrUnitario = findViewById(R.id.etVlrUnitario);
         listView = findViewById(R.id.listView);
-        adapter = new ProdutoMovimentacaoAdapter(produtos, this);
 
         if (!ApiHandler.permiteRealizarMovimentacao()) {
             btnSalvar.setEnabled(false);
@@ -161,8 +160,7 @@ public class MovCadastroActivity extends AppCompatActivity {
             etDtHrMovimentacao.setText(m.getDtCadastro());
             etDesc.setText(m.dsMovimentacao);
             produtos = new ArrayList<>(Arrays.asList(m.produtosMovimentacao));
-            adapter = new ProdutoMovimentacaoAdapter(produtos, this);
-            listView.setAdapter(adapter);
+            resetDataAdapter();
         } else {
             throw new Exception("Movimentação não encontrada.");
         }
@@ -229,7 +227,9 @@ public class MovCadastroActivity extends AppCompatActivity {
         if (errors.size() > 0) {
             throw new Exception(TextUtils.join("\n", errors));
         } else {
-            return new Movimentacao((entrada ? 1 : 2), desc, (ProdutoMovimentacao[]) produtos.toArray());
+            ProdutoMovimentacao[] produtosMovimentacao = new ProdutoMovimentacao[produtos.size()];
+            produtosMovimentacao = produtos.toArray(produtosMovimentacao);
+            return new Movimentacao((entrada ? 1 : 2), desc, produtosMovimentacao);
         }
     }
 
@@ -261,8 +261,7 @@ public class MovCadastroActivity extends AppCompatActivity {
                 } else {
                     ProdutoMovimentacao novo = new ProdutoMovimentacao(qtd, vlrUnitario, produtoSelecionado);
                     produtos.add(novo);
-                    adapter = new ProdutoMovimentacaoAdapter(produtos, this);
-                    listView.setAdapter(adapter);
+                    resetDataAdapter();
                     produtoSelecionado = null;
                     etProduto.setText("");
                     etQtd.setText("");
@@ -274,5 +273,19 @@ public class MovCadastroActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "É necessário selecionar um produto para adicionar.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void resetDataAdapter() {
+        adapter = new ProdutoMovimentacaoAdapter(produtos, this);
+        adapter.setOnButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = (Integer) v.getTag();
+
+                produtos.remove(position);
+                resetDataAdapter();
+            }
+        });
+        listView.setAdapter(adapter);
     }
 }

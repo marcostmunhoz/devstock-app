@@ -19,7 +19,7 @@ public class ProdSelecionarAdapter extends ArrayAdapter<Produto> implements View
     Context context;
 
     public ProdSelecionarAdapter(ArrayList<Produto> data, Context context) {
-        super(context, R.layout.item_produto, data);
+        super(context, R.layout.item_prod_select, data);
         this.context = context;
     }
 
@@ -47,7 +47,8 @@ public class ProdSelecionarAdapter extends ArrayAdapter<Produto> implements View
 
         if (p != null) {
             TextView tvCod = v.findViewById(R.id.tvCod),
-                    tvNome = v.findViewById(R.id.tvNome);
+                    tvNome = v.findViewById(R.id.tvNome),
+                    tvQtd = v.findViewById(R.id.tvQtd);
             Button btnSelecionar = v.findViewById(R.id.btnSelecionar);
 
             if (tvCod != null) {
@@ -56,6 +57,10 @@ public class ProdSelecionarAdapter extends ArrayAdapter<Produto> implements View
 
             if (tvNome != null) {
                 tvNome.setText(p.nmProduto);
+            }
+
+            if (tvQtd != null) {
+                tvQtd.setText("Quantidade: " + p.nrQtdEstocada.toString());
             }
 
             if (btnSelecionar != null) {
