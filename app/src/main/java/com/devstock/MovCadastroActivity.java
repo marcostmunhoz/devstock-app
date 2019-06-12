@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.devstock.adapters.ProdSelecionarAdapter;
 import com.devstock.adapters.ProdutoMovimentacaoAdapter;
 import com.devstock.handlers.ApiHandler;
 import com.devstock.helpers.Helpers;
@@ -243,8 +242,8 @@ public class MovCadastroActivity extends AppCompatActivity {
             try {
                 String qtdString = etQtd.getText().toString(),
                         vlrUnitarioString = etVlrUnitario.getText().toString();
-                Integer qtd = Integer.parseInt(qtdString);
-                Float vlrUnitario = Float.parseFloat(vlrUnitarioString);
+                Integer qtd = (qtdString.length() == 0 ? 0 : Integer.parseInt(qtdString));
+                Float vlrUnitario = (vlrUnitarioString.length() == 0 ? 0 : Float.parseFloat(vlrUnitarioString));
 
                 ArrayList<String> errors = new ArrayList<>();
 
