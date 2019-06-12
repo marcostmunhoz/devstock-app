@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,6 +42,9 @@ public class MovCadastroActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movimentacao_cad);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Mostrar o botão
+        getSupportActionBar().setHomeButtonEnabled(true);      //Ativar o botão
 
         apiHandler = ApiHandler.getInstance(this);
 
@@ -272,6 +276,18 @@ public class MovCadastroActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "É necessário selecionar um produto para adicionar.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
+        switch (item.getItemId()) {
+            case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
+                finish();  //Método para matar a activity e não deixa-lá indexada na pilhagem
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
     public void resetDataAdapter() {

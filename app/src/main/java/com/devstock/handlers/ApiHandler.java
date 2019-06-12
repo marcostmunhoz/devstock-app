@@ -284,10 +284,13 @@ public class ApiHandler {
         });
     }
 
-    public void alteraSenhaUsuario(int idUsu, String senhaNova, Response.Listener success, Response.ErrorListener error) throws Exception {
-        JSONObject data = Helpers.createJsonObject("password", senhaNova);
+    public void alteraSenhaUsuario(String senhaAntiga, String senhaNova, Response.Listener success, Response.ErrorListener error) throws Exception {
+        JSONObject data = Helpers.createJsonObject(
+                "old_password", senhaAntiga,
+                "password", senhaNova
+        );
 
-        this.queue.add(new JsonObjectRequest(Request.Method.PUT, BASE_PATH + "/usuario/alterar-senha/" + idUsu, data, success, error) {
+        this.queue.add(new JsonObjectRequest(Request.Method.PUT, BASE_PATH + "/usuario/alterar-senha/" + getUser().idUsuario, data, success, error) {
             @Override
             public Map<String, String> getHeaders() {
                 return ApiHandler.getHeaders();

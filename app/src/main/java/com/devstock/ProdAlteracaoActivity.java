@@ -93,28 +93,12 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                startActivity(new Intent(this, ProdutosActivity.class));  //O efeito ao ser pressionado do botão (no caso abre a activity)
-                finishAffinity();  //Método para matar a activity e não deixa-lá indexada na pilhagem
+                finish();  //Método para matar a activity e não deixa-lá indexada na pilhagem
                 break;
-            default:break;
+            default:
+                break;
         }
         return true;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 5) {
-            if (resultCode == Activity.RESULT_OK) {
-                if (data.hasExtra("id_forn") && data.hasExtra("razao_social_forn")) {
-                    idForn = data.getIntExtra("id_forn", 0);
-                    etForn.setText(data.getStringExtra("razao_social_forn"));
-                    return;
-                }
-            }
-
-            idForn = null;
-            etForn.setText("");
-        }
     }
 
     public void getProduto() {

@@ -34,6 +34,7 @@
         <activity android:name=".ProdSelecionarActivity" />
         <activity android:name=".UsuAlteracaoActivity" />
         <activity android:name=".MovCadastroActivity" />
+        <activity android:name=".AlterarSenhaActivity" />
     </application>
 
 </manifest>
