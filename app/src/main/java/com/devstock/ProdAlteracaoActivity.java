@@ -47,10 +47,6 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
         etDtCad = findViewById(R.id.etDtCad);
         etDtEdit = findViewById(R.id.etDtEdit);
 
-        if (!ApiHandler.permiteEditarProduto()) {
-            btnSalvar.setEnabled(false);
-        }
-
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,6 +83,8 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
                 getProduto();
             }
         }
+
+        setPermissao();
     }
 
     @Override
@@ -250,5 +248,15 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
     public void abrirSelectFornecedor() {
         Intent intent = new Intent(this, FornSelecionarActivity.class);
         startActivityForResult(intent, 5);
+    }
+
+    public void setPermissao() {
+        if (!ApiHandler.permiteEditarProduto()) {
+            btnSalvar.setEnabled(false);
+            btnSelecionar.setEnabled(false);
+            etCod.setEnabled(false);
+            etDesc.setEnabled(false);
+            etQtd.setEnabled(false);
+        }
     }
 }

@@ -54,10 +54,6 @@ public class UsuAlteracaoActivity extends AppCompatActivity {
         cbFlgEditProd = findViewById(R.id.cbFlgEditProd);
         cbFlgMov = findViewById(R.id.cbFlgMov);
 
-        if (!ApiHandler.permiteEditarUsuario()) {
-            btnSalvar.setEnabled(false);
-        }
-
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,6 +84,8 @@ public class UsuAlteracaoActivity extends AppCompatActivity {
                 getUsuario(idUsuario);
             }
         }
+
+        setPermissao();
     }
 
     @Override
@@ -252,6 +250,19 @@ public class UsuAlteracaoActivity extends AppCompatActivity {
             throw new Exception(TextUtils.join("\n", errors));
         } else {
             return new Usuario(idUsuario, nmUsuario, login, password, email, flgEditUsu, flgEditForn, flgEditProd, flgMov);
+        }
+    }
+
+    public void setPermissao() {
+        if (!ApiHandler.permiteEditarUsuario()) {
+            btnSalvar.setEnabled(false);
+            etNmUsuario.setEnabled(false);
+            etLogin.setEnabled(false);
+            etEmail.setEnabled(false);
+            cbFlgEditUsu.setEnabled(false);
+            cbFlgEditForn.setEnabled(false);
+            cbFlgEditProd.setEnabled(false);
+            cbFlgMov.setEnabled(false);
         }
     }
 }

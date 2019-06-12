@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 public class ProdutoMovimentacaoAdapter extends ArrayAdapter<ProdutoMovimentacao> implements View.OnClickListener {
     private View.OnClickListener onButtonClickListener;
+    private boolean locked;
 
     Context context;
 
@@ -66,9 +67,17 @@ public class ProdutoMovimentacaoAdapter extends ArrayAdapter<ProdutoMovimentacao
             if (btnExcluir != null) {
                 btnExcluir.setOnClickListener(this);
                 btnExcluir.setTag(position);
+
+                if (this.locked) {
+                    btnExcluir.setEnabled(false);
+                }
             }
         }
 
         return v;
+    }
+
+    public void setLocked(boolean lock) {
+        this.locked = lock;
     }
 }

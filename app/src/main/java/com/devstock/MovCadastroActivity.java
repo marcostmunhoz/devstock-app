@@ -31,7 +31,7 @@ public class MovCadastroActivity extends AppCompatActivity {
 
     Button btnSelecionar, btnAddProd, btnSalvar, btnVoltar;
     RadioButton rbEntrada, rbSaida;
-    EditText etDtHrMovimentacao, etDesc, etProduto, etQtd, etVlrUnitario;
+    EditText etDtHrMovimentacao, etDesc, etProduto, etQtd, etVlrUnitario, etNmUsuario;
     ListView listView;
     ArrayList<ProdutoMovimentacao> produtos = new ArrayList<>();
     Produto produtoSelecionado = null;
@@ -60,10 +60,7 @@ public class MovCadastroActivity extends AppCompatActivity {
         etQtd = findViewById(R.id.etQtd);
         etVlrUnitario = findViewById(R.id.etVlrUnitario);
         listView = findViewById(R.id.listView);
-
-        if (!ApiHandler.permiteRealizarMovimentacao()) {
-            btnSalvar.setEnabled(false);
-        }
+        etNmUsuario = findViewById(R.id.etNmUsuario);
 
         btnSelecionar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +101,20 @@ public class MovCadastroActivity extends AppCompatActivity {
                 getMovimentacao();
             }
         }
+
+        setPermissao();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
+        switch (item.getItemId()) {
+            case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
+                finish();  //Método para matar a activity e não deixa-lá indexada na pilhagem
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
     @Override
@@ -161,9 +172,11 @@ public class MovCadastroActivity extends AppCompatActivity {
             }
 
             etDtHrMovimentacao.setText(m.getDtCadastro());
+            etNmUsuario.setText(m.usuario.nmUsuario);
             etDesc.setText(m.dsMovimentacao);
             produtos = new ArrayList<>(Arrays.asList(m.produtosMovimentacao));
-            resetDataAdapter();
+
+            setPermissao();
         } else {
             throw new Exception("Movimentação não encontrada.");
         }
@@ -264,7 +277,7 @@ public class MovCadastroActivity extends AppCompatActivity {
                 } else {
                     ProdutoMovimentacao novo = new ProdutoMovimentacao(qtd, vlrUnitario, produtoSelecionado);
                     produtos.add(novo);
-                    resetDataAdapter();
+                    setPermissao();
                     produtoSelecionado = null;
                     etProduto.setText("");
                     etQtd.setText("");
@@ -278,29 +291,35 @@ public class MovCadastroActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
-        switch (item.getItemId()) {
-            case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                finish();  //Método para matar a activity e não deixa-lá indexada na pilhagem
-                break;
-            default:
-                break;
-        }
-        return true;
-    }
-
-    public void resetDataAdapter() {
+    public void resetDataAdapter(boolean lock) {
         adapter = new ProdutoMovimentacaoAdapter(produtos, this);
+        adapter.setLocked(lock);
         adapter.setOnButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = (Integer) v.getTag();
 
                 produtos.remove(position);
-                resetDataAdapter();
+                setPermissao();
             }
         });
         listView.setAdapter(adapter);
+    }
+
+    public void setPermissao() {
+        if (!ApiHandler.permiteRealizarMovimentacao() || idMovimentacao != null) {
+            btnSelecionar.setEnabled(false);
+            btnAddProd.setEnabled(false);
+            btnSalvar.setEnabled(false);
+            rbEntrada.setEnabled(false);
+            rbSaida.setEnabled(false);
+            etDtHrMovimentacao.setEnabled(false);
+            etDesc.setEnabled(false);
+            etQtd.setEnabled(false);
+            etVlrUnitario.setEnabled(false);
+            resetDataAdapter(true);
+        } else {
+            resetDataAdapter(false);
+        }
     }
 }

@@ -50,10 +50,6 @@ public class FornAlteracaoActivity extends AppCompatActivity {
         etDtCad = findViewById(R.id.etDtCad);
         etDtEdit = findViewById(R.id.etDtEdit);
 
-        if (!ApiHandler.permiteEditarFornecedor()) {
-            btnSalvar.setEnabled(false);
-        }
-
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,6 +79,8 @@ public class FornAlteracaoActivity extends AppCompatActivity {
                 getFornecedor();
             }
         }
+
+        setPermissao();
     }
 
     @Override
@@ -252,6 +250,18 @@ public class FornAlteracaoActivity extends AppCompatActivity {
             throw new Exception(TextUtils.join("\n", errors));
         } else {
             return new Fornecedor(idForn, razao, nomeFantasia, cnpj, endereco, fone, email);
+        }
+    }
+
+    public void setPermissao() {
+        if (!ApiHandler.permiteEditarFornecedor()) {
+            etCnpj.setEnabled(false);
+            etRazao.setEnabled(false);
+            etNomeFantasia.setEnabled(false);
+            etEnd.setEnabled(false);
+            etFone.setEnabled(false);
+            etEmail.setEnabled(false);
+            btnSalvar.setEnabled(false);
         }
     }
 }
