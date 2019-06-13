@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,14 +14,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ProdutosCRUD"></activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".MenuActivity" />
+        <activity android:name=".FornecedoresActivity" />
+        <activity android:name=".FornAlteracaoActivity" />
+        <activity android:name=".FornSelecionarActivity" />
+        <activity android:name=".ProdutosActivity" />
+        <activity android:name=".ProdAlteracaoActivity" />
+        <activity android:name=".UsuariosActivity" />
+        <activity android:name=".MovimentacoesActivity" />
+        <activity android:name=".ProdSelecionarActivity" />
+        <activity android:name=".UsuAlteracaoActivity" />
+        <activity android:name=".MovCadastroActivity" />
+        <activity android:name=".AlterarSenhaActivity" />
     </application>
 
 </manifest>

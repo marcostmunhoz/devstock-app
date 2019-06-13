@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FornAlteracaoActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/txtCnpj"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CNPJ:" />
+
+        <EditText
+            android:id="@+id/etCNPJ"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:maxLength="14"
+            android:hint="CNPJ:"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/txtRazao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Razão Social:" />
+
+        <EditText
+            android:id="@+id/etRazao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:maxLength="100"
+            android:hint="Razão Social"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/txtNomeFantasia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nome Fantasia:" />
+
+        <EditText
+            android:id="@+id/etNomeFantasia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:maxLength="100"
+            android:hint="Nome Fantasia"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/txtEnd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Endereço:" />
+
+        <EditText
+            android:id="@+id/etEnd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:maxLength="150"
+            android:hint="Endereço"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/txtFone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Telefone:" />
+
+        <EditText
+            android:id="@+id/etFone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:maxLength="11"
+            android:hint="Telefone"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/txtEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="E-mail:" />
+
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:maxLength="50"
+            android:hint="E-mail"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/txtDtCad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Data de Cadastro:" />
+
+        <EditText
+            android:id="@+id/etDtCad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Data de Cadastro"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/txtDtEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Data de Edição:" />
+
+        <EditText
+            android:id="@+id/etDtEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Data de Edição"
+            android:inputType="textPersonName" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+        <Button
+            android:id="@+id/btnVoltar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Voltar" />
+
+        <Button
+            android:id="@+id/btnSalvar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Salvar" />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
