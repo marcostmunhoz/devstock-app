@@ -88,6 +88,22 @@ public class ProdAlteracaoActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 5) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (data.hasExtra("id_forn") && data.hasExtra("razao_social_forn")) {
+                    idForn = data.getIntExtra("id_forn", 0);
+                    etForn.setText(data.getStringExtra("razao_social_forn"));
+                    return;
+                }
+            }
+
+            idForn = null;
+            etForn.setText("");
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
         switch (item.getItemId()) {
             case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
